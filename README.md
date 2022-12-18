@@ -1,2 +1,4 @@
-# nor_eden
-NorEden 
+# NorEden
+NorEden project, UiO
+
+Environmental impact of food production
