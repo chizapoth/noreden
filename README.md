@@ -1,4 +1,4 @@
 # NorEden
-NorEden project
 
-Environmental impact of food production
+(Place-holder for R package related to NorEden project)
+
