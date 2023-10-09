@@ -1,0 +1,10 @@
+url: https://andreaczhang.github.io/noreden/
+
+template:
+  bootstrap: 5
+  bslib:
+    # primary: "#393c61"
+    # secondary: "#E9F39F"
+    border-radius: 0.0rem
+    btn-border-radius: 0.0rem
+    # font-size-base: 0.75rem

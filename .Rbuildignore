@@ -1,0 +1,13 @@
+^\.Rproj\.user$
+^.*\.Rproj$
+^dev$
+^_pkgdown\.yml$
+^license\.md$
+^LICENSE\.md$
+Makefile
+data-raw
+cran-comments.md
+^\.github$
+
+^docs$
+^pkgdown$
