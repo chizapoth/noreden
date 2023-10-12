@@ -1,3 +1,4 @@
+# big macro group -----
 # first define big groups
 grain <- c('Bread', 'Other grains', 'Cakes')
 fruit_vege <- c('Potatoes', 'Vegetables', 'Legumes', 'Fruit, berries', 
@@ -31,4 +32,5 @@ foodname_group <- data.frame(
 
 # write data
 
+save(foodname_group, file = "data/foodname_group.rda", compress = 'xz')
 

@@ -7,12 +7,25 @@ Authors@R:
   )
 Description: User-friendly functions and tools for nutrition researcher to explore diet design, under various nutritional and environmental constraints.
 License: MIT + file LICENSE
+URL: https://andreaczhang.github.io/noreden/, https://github.com/andreaczhang/noreden
+BugReports: https://github.com/andreaczhang/noreden/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Imports: data.table,
+    magrittr, 
+    rlang, 
+    dplyr, 
+    ggplot2, 
+    gt, 
+    gtExtras
 Suggests: 
     knitr,
     rmarkdown,
+    patchwork,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+Depends: 
+    R (>= 4.2.0)
+LazyData: true

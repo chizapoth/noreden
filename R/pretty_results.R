@@ -1,8 +1,15 @@
 
-# ddd <- prep_diet_comparison_gram(data_dietsummary = data_newdiet)
-
 # plot diet ----
 
+#' Make diet comparison summary table (intake in grams)
+#'
+#' @param data_dietsummary a dataframe that contains x,y,z
+#'
+#' @return a list of items (pending description)
+#' @export
+#'
+#' @examples
+#' ddd <- prep_diet_comparison_gram(data_dietsummary = data_newdiet)
 prep_diet_comparison_gram <- function(data_dietsummary){
   
   d <- data_dietsummary
@@ -13,7 +20,7 @@ prep_diet_comparison_gram <- function(data_dietsummary){
                           by = 'food_name')
   }
   # select
-  pd <- select(d, c(food_name, current, new, group_macro))
+  pd <- dplyr::select(d, c(food_name, current, new, group_macro))
   # order
   name_ordered <- foodname_group$food_name
   pd$food_name_ordered <- factor(pd$food_name, 
@@ -34,19 +41,23 @@ prep_diet_comparison_gram <- function(data_dietsummary){
 
 
 
-
-# plot.diet_comparison_gram(plot_obj = ddd,
-#                           title_text = 'New diet',
-#                           axis_x_text = 'Food groups',
-#                           axis_y_text = 'Intake (grams)')
-# 
-# data_newdiet
-# 
-# plot(plot_obj = ddd,
-#      title_text = 'New diet',
-#      axis_x_text = 'Food groups',
-#      axis_y_text = 'Intake (grams)')
-
+#' Plotting function for diet comparison summary
+#'
+#' @param plot_obj an object of class <diet_comparison_percent>
+#' @param title_text Title for the plot
+#' @param axis_x_text X axis title
+#' @param axis_y_text Y axis title
+#'
+#' @return A plot 
+#' @export
+#'
+#' @examples
+#' library(ggplot2)
+#' ddd <- prep_diet_comparison_gram(data_dietsummary = data_newdiet)
+#' plot(plot_obj = ddd,
+#'                           title_text = 'New diet',
+#'                          axis_x_text = 'Food groups',
+#'                           axis_y_text = 'Intake (grams)')
 plot.diet_comparison_gram <- function(plot_obj, 
                                       title_text, 
                                       axis_x_text,
@@ -93,8 +104,15 @@ plot.diet_comparison_gram <- function(plot_obj,
 
 
 
-ddd <- prep_diet_comparison_percent(data_dietsummary = data_newdiet)
-
+#' Make diet comparison summary table (percent change)
+#'
+#' @param data_dietsummary a dataframe that contains x,y,z
+#'
+#' @return a list of items (pending description)
+#' @export
+#'
+#' @examples
+#' ddd <- prep_diet_comparison_percent(data_dietsummary = data_newdiet)
 prep_diet_comparison_percent <- function(data_dietsummary){
   
   d <- data_dietsummary
@@ -105,7 +123,7 @@ prep_diet_comparison_percent <- function(data_dietsummary){
                           by = 'food_name')
   }
   # select
-  pd <- select(d, c(food_name, group_macro, percent_change))
+  pd <- dplyr::select(d, c(food_name, group_macro, percent_change))
   # order
   name_ordered <- foodname_group$food_name
   pd$food_name_ordered <- factor(pd$food_name, 
@@ -124,11 +142,22 @@ prep_diet_comparison_percent <- function(data_dietsummary){
 
 
 
-# plot.diet_comparison_percent(plot_obj = ddd,
-#                           title_text = 'New diet',
-#                           axis_x_text = 'Food groups',
-#                           axis_y_text = 'Intake (grams)')
-
+#' Plotting function for diet comparison summary
+#'
+#' @param plot_obj an object of class <diet_comparison_percent>
+#' @param title_text Title for the plot
+#' @param axis_x_text X axis title
+#' @param axis_y_text Y axis title
+#'
+#' @return A plot 
+#' @export
+#'
+#' @examples
+#' ddd <- prep_diet_comparison_percent(data_dietsummary = data_newdiet)
+#' plot(plot_obj = ddd,
+#'                           title_text = 'Percent change',
+#'                          axis_x_text = 'Food groups',
+#'                           axis_y_text = 'Percent')
 plot.diet_comparison_percent <- function(plot_obj, 
                                       title_text, 
                                       axis_x_text,
@@ -178,9 +207,16 @@ plot.diet_comparison_percent <- function(plot_obj,
 
 # table contrib ----
 
-# prep_contrib(data_contrib = data_contrib)
-# dtt <- prep_contrib(data_contrib = data_contrib, demo = T)
-
+#' Summary table preparation for fast checking constraint fulfilment
+#'
+#' @param data_contrib summary table from the results
+#' @param demo T or F, is this for demonstration
+#'
+#' @return a dataframe
+#' @export
+#'
+#' @examples
+#' dtt <- prep_contrib(data_contrib = data_contrib, demo = T)
 prep_contrib <- function(data_contrib, demo = F){
   
   td <- data_contrib[, c("tag_outcome",
@@ -205,10 +241,17 @@ prep_contrib <- function(data_contrib, demo = F){
   td <- data.table::setDT(td)
   data.table::setnames(td, old = 'tc_new_diet', 'tc_new')
   data.table::setnames(td, old = 'total_contrib_raw', 'tc_current')
+  # td$min <- round(td$min, 1)
+  # td$max <- round(td$max, 1)
+  # td$dev_if_not_ok <- td$dev_if_not_ok*100
+  # td$checker <- td$is_ok
   td[, min := round(min, digits = 1)]
   td[, max := round(max, digits = 1)]
   td[, dev_if_not_ok := dev_if_not_ok*100]
   td[, checker := is_ok]
+  
+  #td$checker[which(td$checker == 'Yes')] <- '-'
+  #td$checker[which(td$checker == 'beyond_lower')] <- paste0(abs(), '% below')
   
   td[checker == 'Yes', checker := '-']
   td[checker == 'beyond_lower', checker := paste0(abs(dev_if_not_ok), '% below')]
@@ -227,8 +270,16 @@ prep_contrib <- function(data_contrib, demo = F){
 }
 
 
-# tab_contrib(tab_obj = dtt)
 
+#' Make `gt` table for the diet contribution summary
+#'
+#' @param tab_obj a table object from prep_contrib()
+#'
+#' @return a `gt` table with coloring
+#' @export
+#'
+#' @examples
+#' tab_contrib(tab_obj = dtt)
 tab_contrib <- function(tab_obj){
   
   td <- tab_obj$gt_data

@@ -1,8 +1,8 @@
 ---
-title: "placeholder"
+title: "Introduction to `noreden`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{placeholder}
+  %\VignetteIndexEntry{Introduction to `noreden`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,4 +16,58 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(noreden)
+library(data.table)
+library(ggplot2)
+library(gt)
+library(gtExtras)
 ```
+
+This is the first vignette document for how to use the package. 
+
+Let us try to load a dataset.
+
+```{r}
+head(foodname_group)
+```
+
+
+# Give it a try 
+
+Input data
+
+```{r}
+data_newdiet
+```
+
+We try to visualize the results
+
+```{r}
+ddd <- prep_diet_comparison_gram(data_dietsummary = data_newdiet)
+p1 <- plot(plot_obj = ddd,
+     title_text = 'New diet',
+     axis_x_text = 'Food groups',
+     axis_y_text = 'Intake (grams)')
+p1
+```
+
+Percentage 
+
+```{r}
+ddd <- prep_diet_comparison_percent(data_dietsummary = data_newdiet)
+p2 <- plot(plot_obj = ddd,
+     title_text = 'Percent change',
+     axis_x_text = 'Food groups',
+     axis_y_text = 'Percent')
+p2
+```
+
+
+Can actually put them side by side.
+
+```{r}
+library(patchwork)
+p1 + p2 + plot_layout(nrow = 1)
+```
+
+
+
