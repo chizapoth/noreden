@@ -4,25 +4,33 @@
 #' Make diet comparison summary table (intake in grams)
 #'
 #' @param data_dietsummary a dataframe that contains x,y,z
-#'
+#' @param dref_foodgroup a reference dataframe to provide food group information
 #' @return a list of items (pending description)
 #' @export
 #'
 #' @examples
 #' ddd <- prep_diet_comparison_gram(data_dietsummary = data_newdiet)
-prep_diet_comparison_gram <- function(data_dietsummary){
+prep_diet_comparison_gram <- function(data_dietsummary, 
+                                      dref_foodgroup = noreden::foodname_group){
+  
+  
+  food_name <- NULL
+  current <- NULL
+  new <- NULL
+  group_macro <- NULL
+  # dref_foodgroup <- noreden::foodname_group
   
   d <- data_dietsummary
   # add group_macro
   if(!"group_macro" %in% colnames(data_dietsummary)){
     d <- dplyr::left_join(data_dietsummary,
-                          foodname_group,
+                          dref_foodgroup, # data
                           by = 'food_name')
   }
   # select
   pd <- dplyr::select(d, c(food_name, current, new, group_macro))
   # order
-  name_ordered <- foodname_group$food_name
+  name_ordered <- dref_foodgroup$food_name
   pd$food_name_ordered <- factor(pd$food_name, 
                                  levels = name_ordered, 
                                  labels = name_ordered)
@@ -49,22 +57,29 @@ prep_diet_comparison_gram <- function(data_dietsummary){
 #' @param axis_y_text Y axis title
 #'
 #' @return A plot 
+#' @import ggplot2
 #' @export
 #'
 #' @examples
-#' library(ggplot2)
 #' ddd <- prep_diet_comparison_gram(data_dietsummary = data_newdiet)
-#' plot(plot_obj = ddd,
+#' plot_diet_comparison_gram(plot_obj = ddd,
 #'                           title_text = 'New diet',
 #'                          axis_x_text = 'Food groups',
 #'                           axis_y_text = 'Intake (grams)')
-plot.diet_comparison_gram <- function(plot_obj, 
+plot_diet_comparison_gram <- function(plot_obj, 
                                       title_text, 
                                       axis_x_text,
                                       axis_y_text){
   
-
+  # later make it plot.diet_comparison_gram (S3)
   # need to match the column names
+  
+  food_name_ordered <- NULL
+  new <- NULL
+  group_macro <- NULL
+  current <- NULL
+  
+  
   pd <- plot_obj$plot_data
   p <- ggplot(data = pd, aes(x = food_name_ordered, 
                              y = new, 
@@ -107,25 +122,32 @@ plot.diet_comparison_gram <- function(plot_obj,
 #' Make diet comparison summary table (percent change)
 #'
 #' @param data_dietsummary a dataframe that contains x,y,z
-#'
+#' @param dref_foodgroup a reference dataframe to provide food group information
 #' @return a list of items (pending description)
 #' @export
 #'
 #' @examples
 #' ddd <- prep_diet_comparison_percent(data_dietsummary = data_newdiet)
-prep_diet_comparison_percent <- function(data_dietsummary){
+prep_diet_comparison_percent <- function(data_dietsummary, 
+                                         dref_foodgroup = noreden::foodname_group){
+  
+  
+  food_name <- NULL
+  group_macro <- NULL
+  percent_change <- NULL
+  
   
   d <- data_dietsummary
   # add group_macro
   if(!"group_macro" %in% colnames(data_dietsummary)){
     d <- dplyr::left_join(data_dietsummary,
-                          foodname_group,
+                          dref_foodgroup,
                           by = 'food_name')
   }
   # select
   pd <- dplyr::select(d, c(food_name, group_macro, percent_change))
   # order
-  name_ordered <- foodname_group$food_name
+  name_ordered <- dref_foodgroup$food_name
   pd$food_name_ordered <- factor(pd$food_name, 
                                  levels = name_ordered, 
                                  labels = name_ordered)
@@ -150,18 +172,25 @@ prep_diet_comparison_percent <- function(data_dietsummary){
 #' @param axis_y_text Y axis title
 #'
 #' @return A plot 
+#' @import ggplot2
 #' @export
 #'
 #' @examples
 #' ddd <- prep_diet_comparison_percent(data_dietsummary = data_newdiet)
-#' plot(plot_obj = ddd,
+#' plot_diet_comparison_percent(plot_obj = ddd,
 #'                           title_text = 'Percent change',
 #'                          axis_x_text = 'Food groups',
 #'                           axis_y_text = 'Percent')
-plot.diet_comparison_percent <- function(plot_obj, 
+plot_diet_comparison_percent <- function(plot_obj, 
                                       title_text, 
                                       axis_x_text,
                                       axis_y_text){
+  
+  # later make it plot.diet_comparison_percent (S3)
+  
+  food_name_ordered <- NULL
+  percent_change <- NULL
+  group_macro <- NULL
   
   pd <- plot_obj$plot_data
   # need to match the column names
@@ -201,136 +230,6 @@ plot.diet_comparison_percent <- function(plot_obj,
   p
   
 }
-
-
-
-
-# table contrib ----
-
-#' Summary table preparation for fast checking constraint fulfilment
-#'
-#' @param data_contrib summary table from the results
-#' @param demo T or F, is this for demonstration
-#'
-#' @return a dataframe
-#' @export
-#'
-#' @examples
-#' dtt <- prep_contrib(data_contrib = data_contrib, demo = T)
-prep_contrib <- function(data_contrib, demo = F){
-  
-  td <- data_contrib[, c("tag_outcome",
-                         "tc_new_diet", 
-                         "total_contrib_raw", 
-                         "min", 
-                         "max", 
-                         "is_ok",
-                         "dev_if_not_ok")]
-  
-  if(demo == T){
-    # add a fake row for exceeding upper threshold
-    nr <- nrow(td)+1
-    td[nr, ] <- td[2, ]
-    td[nr, ]$tag_outcome <- 'fake_metric'
-    td[nr, ]$tc_new_diet <- 90.21
-    td[nr, ]$is_ok <- 'beyond_upper'
-    td[nr, ]$dev_if_not_ok <- 0.018
-    
-  }
-  
-  td <- data.table::setDT(td)
-  data.table::setnames(td, old = 'tc_new_diet', 'tc_new')
-  data.table::setnames(td, old = 'total_contrib_raw', 'tc_current')
-  # td$min <- round(td$min, 1)
-  # td$max <- round(td$max, 1)
-  # td$dev_if_not_ok <- td$dev_if_not_ok*100
-  # td$checker <- td$is_ok
-  td[, min := round(min, digits = 1)]
-  td[, max := round(max, digits = 1)]
-  td[, dev_if_not_ok := dev_if_not_ok*100]
-  td[, checker := is_ok]
-  
-  #td$checker[which(td$checker == 'Yes')] <- '-'
-  #td$checker[which(td$checker == 'beyond_lower')] <- paste0(abs(), '% below')
-  
-  td[checker == 'Yes', checker := '-']
-  td[checker == 'beyond_lower', checker := paste0(abs(dev_if_not_ok), '% below')]
-  td[checker == 'beyond_upper', checker := paste0(abs(dev_if_not_ok), '% above')]
-  
-  # drop columns
-  td[, is_ok := NULL]
-  td[, dev_if_not_ok := NULL]
-  
-  td <- data.frame(td)
-  result <- list(data_contrib = data_contrib, 
-                 gt_data = td, 
-                 demo = demo)
-  # result <- structure(result, class = 'diet_comparison_percent')
-  return(result)
-}
-
-
-
-#' Make `gt` table for the diet contribution summary
-#'
-#' @param tab_obj a table object from prep_contrib()
-#'
-#' @return a `gt` table with coloring
-#' @export
-#'
-#' @examples
-#' tab_contrib(tab_obj = dtt)
-tab_contrib <- function(tab_obj){
-  
-  td <- tab_obj$gt_data
-  # make gt table
-  gtt <- gt(td)
-  # merge min and max in one col
-  gtt <- cols_merge(gtt, 
-                    columns = c(min, max), 
-                    pattern = "{1}&dash;{2}")
-  
-  # add header
-  gtt <- tab_spanner(gtt, 
-                     label = md("**Total contribution**"), 
-                     columns = c(tc_new, tc_current))
-  
-  gtt <- tab_spanner(gtt, 
-                     label = md("**Constraint**"), 
-                     columns = c(min, checker))
-  # change text
-  gtt <- cols_label(gtt, 
-                    tag_outcome = 'Outcome', 
-                    tc_new = 'New diet', 
-                    tc_current = "Current diet", 
-                    min = "Range", 
-                    checker = 'Comments')
-
-  # center checker column
-  gtt <- cols_align(gtt, align = 'center', columns = checker)
-  
-  # boldface tc new
-  gtt <- tab_style(gtt, 
-                   locations = cells_body(columns = tc_new), 
-                   style = cell_text(weight = 'bold'))
-  # add color: blue for below, red for above
-  gtt <- tab_style(gtt, 
-                   locations = cells_body(
-                     columns = c(tc_new, checker), 
-                     rows = (tc_new < tc_current)&checker != '-'), 
-                   style = cell_fill(color = 'lightblue', alpha = 0.8))
-  
-  gtt <- tab_style(gtt, 
-                   locations = cells_body(
-                     columns = c(tc_new, checker), 
-                     rows = (tc_new > tc_current)&checker != '-'), 
-                   style = cell_fill(color = 'lightcoral', alpha = 0.8))
-  gtt
-  
-  return(gtt)
-}
-
-
 
 
 

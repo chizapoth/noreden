@@ -4,10 +4,15 @@
 \alias{prep_diet_comparison_percent}
 \title{Make diet comparison summary table (percent change)}
 \usage{
-prep_diet_comparison_percent(data_dietsummary)
+prep_diet_comparison_percent(
+  data_dietsummary,
+  dref_foodgroup = noreden::foodname_group
+)
 }
 \arguments{
 \item{data_dietsummary}{a dataframe that contains x,y,z}
+
+\item{dref_foodgroup}{a reference dataframe to provide food group information}
 }
 \value{
 a list of items (pending description)

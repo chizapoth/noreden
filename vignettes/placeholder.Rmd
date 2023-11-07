@@ -16,10 +16,9 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(noreden)
-library(data.table)
-library(ggplot2)
-library(gt)
-library(gtExtras)
+# library(ggplot2) # no need if depend rather than import
+# library(gt)
+# library(gtExtras)
 ```
 
 This is the first vignette document for how to use the package. 
@@ -43,7 +42,7 @@ We try to visualize the results
 
 ```{r}
 ddd <- prep_diet_comparison_gram(data_dietsummary = data_newdiet)
-p1 <- plot(plot_obj = ddd,
+p1 <- plot_diet_comparison_gram(plot_obj = ddd,
      title_text = 'New diet',
      axis_x_text = 'Food groups',
      axis_y_text = 'Intake (grams)')
@@ -54,7 +53,7 @@ Percentage
 
 ```{r}
 ddd <- prep_diet_comparison_percent(data_dietsummary = data_newdiet)
-p2 <- plot(plot_obj = ddd,
+p2 <- plot_diet_comparison_percent(plot_obj = ddd,
      title_text = 'Percent change',
      axis_x_text = 'Food groups',
      axis_y_text = 'Percent')

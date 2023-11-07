@@ -133,11 +133,12 @@ td <- data_contrib[, c("tag_outcome",
                        "dev_if_not_ok")]
 
 # add a fake row for exceeding upper threshold
-td[nrow(td)+1, ] <- td[2, ]
-td[nrow(td)+1, ]$tag_outcome <- 'fake_metric'
-td[nrow(td)+1, ]$tc_new_diet <- 90.21
-td[nrow(td)+1, ]$is_ok <- 'beyond_upper'
-td[nrow(td)+1, ]$dev_if_not_ok <- 0.018
+nr <- nrow(td)+1
+td[nr, ] <- td[2, ]
+td[nr, ]$tag_outcome <- 'fake_metric'
+td[nr, ]$tc_new_diet <- 90.21
+td[nr, ]$is_ok <- 'beyond_upper'
+td[nr, ]$dev_if_not_ok <- 0.018
 
 
 td <- data.table::setDT(td)
@@ -158,6 +159,16 @@ td[, dev_if_not_ok := NULL]
 
 td
 
+# demo ----
+data_contrib
+
+td <- data.frame(td)
+demo <- T
+result <- list(data_contrib = data_contrib, 
+               gt_data = td, 
+               demo = demo)
+result
+tab_contrib(result)
 
 # make table
 
@@ -204,6 +215,145 @@ gtt <- tab_style(gtt,
                    rows = (tc_new > tc_current)&checker != '-'), 
                  style = cell_fill(color = 'lightcoral', alpha = 0.8))
 gtt
+
+
+
+
+
+# _______ LATER ______ ----
+
+# table contrib ----
+
+#' Summary table preparation for fast checking constraint fulfilment
+#'
+#' @param data_contrib summary table from the results
+#' @param demo T or F, is this for demonstration
+#'
+#' @return a dataframe
+#' @export
+#'
+#' @examples
+#' dtt <- prep_contrib(data_contrib = data_contrib, demo = T)
+prep_contrib <- function(data_contrib, demo = F){
+  
+  td <- data_contrib[, c("tag_outcome",
+                         "tc_new_diet", 
+                         "total_contrib_raw", 
+                         "min", 
+                         "max", 
+                         "is_ok",
+                         "dev_if_not_ok")]
+  
+  if(demo == T){
+    # add a fake row for exceeding upper threshold
+    nr <- nrow(td)+1
+    td[nr, ] <- td[2, ]
+    td[nr, ]$tag_outcome <- 'fake_metric'
+    td[nr, ]$tc_new_diet <- 90.21
+    td[nr, ]$is_ok <- 'beyond_upper'
+    td[nr, ]$dev_if_not_ok <- 0.018
+    
+  }
+  
+  td <- data.table::setDT(td)
+  data.table::setnames(td, old = 'tc_new_diet', 'tc_new')
+  data.table::setnames(td, old = 'total_contrib_raw', 'tc_current')
+  # td$min <- round(td$min, 1)
+  # td$max <- round(td$max, 1)
+  # td$dev_if_not_ok <- td$dev_if_not_ok*100
+  # td$checker <- td$is_ok
+  td[, min := round(min, digits = 1)]
+  td[, max := round(max, digits = 1)]
+  td[, dev_if_not_ok := dev_if_not_ok*100]
+  td[, checker := is_ok]
+  
+  #td$checker[which(td$checker == 'Yes')] <- '-'
+  #td$checker[which(td$checker == 'beyond_lower')] <- paste0(abs(), '% below')
+  
+  td[checker == 'Yes', checker := '-']
+  td[checker == 'beyond_lower', checker := paste0(abs(dev_if_not_ok), '% below')]
+  td[checker == 'beyond_upper', checker := paste0(abs(dev_if_not_ok), '% above')]
+  
+  # drop columns
+  td[, is_ok := NULL]
+  td[, dev_if_not_ok := NULL]
+  
+  td <- data.frame(td)
+  result <- list(data_contrib = data_contrib, 
+                 gt_data = td, 
+                 demo = demo)
+  # result <- structure(result, class = 'diet_comparison_percent')
+  return(result)
+}
+
+
+
+#' Make `gt` table for the diet contribution summary
+#'
+#' @param tab_obj a table object from prep_contrib()
+#'
+#' @return a `gt` table with coloring
+#' @import gt
+#' @export
+#'
+#' @examples
+#' tab_contrib(tab_obj = dtt)
+tab_contrib <- function(tab_obj){
+  
+  td <- tab_obj$gt_data
+  # make gt table
+  gtt <- gt(td)
+  # merge min and max in one col
+  gtt <- cols_merge(gtt, 
+                    columns = c(min, max), 
+                    pattern = "{1}&dash;{2}")
+  
+  # add header
+  gtt <- tab_spanner(gtt, 
+                     label = md("**Total contribution**"), 
+                     columns = c(tc_new, tc_current))
+  
+  gtt <- tab_spanner(gtt, 
+                     label = md("**Constraint**"), 
+                     columns = c(min, checker))
+  # change text
+  gtt <- cols_label(gtt, 
+                    tag_outcome = 'Outcome', 
+                    tc_new = 'New diet', 
+                    tc_current = "Current diet", 
+                    min = "Range", 
+                    checker = 'Comments')
+  
+  # center checker column
+  gtt <- cols_align(gtt, align = 'center', columns = checker)
+  
+  # boldface tc new
+  gtt <- tab_style(gtt, 
+                   locations = cells_body(columns = tc_new), 
+                   style = cell_text(weight = 'bold'))
+  # add color: blue for below, red for above
+  gtt <- tab_style(gtt, 
+                   locations = cells_body(
+                     columns = c(tc_new, checker), 
+                     rows = (tc_new < tc_current)&checker != '-'), 
+                   style = cell_fill(color = 'lightblue', alpha = 0.8))
+  
+  gtt <- tab_style(gtt, 
+                   locations = cells_body(
+                     columns = c(tc_new, checker), 
+                     rows = (tc_new > tc_current)&checker != '-'), 
+                   style = cell_fill(color = 'lightcoral', alpha = 0.8))
+  gtt
+  
+  return(gtt)
+}
+
+
+
+
+
+
+
 
 
 
