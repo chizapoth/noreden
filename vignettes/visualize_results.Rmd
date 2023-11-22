@@ -1,8 +1,8 @@
 ---
-title: "Introduction to `noreden`"
+title: "Result visualization"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to `noreden`}
+  %\VignetteIndexEntry{Result visualization}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,9 +16,6 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(noreden)
-# library(ggplot2) # no need if depend rather than import
-# library(gt)
-# library(gtExtras)
 ```
 
 This is the first vignette document for how to use the package. 

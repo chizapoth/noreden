@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">noreden</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,13 +18,16 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/noreden.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/placeholder.html">Introduction to `noreden`</a>
+    <a class="dropdown-item" href="../articles/visualize_results.html">Result visualization</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -59,6 +62,31 @@
 
       <dl><dt>
           
+          <code><a href="compare_new_diet.html">compare_new_diet()</a></code> 
+        </dt>
+        <dd>Compare new diet with current diet</dd>
+      </dl><dl><dt>
+          
+          <code><a href="compute_constr.html">compute_constr()</a></code> 
+        </dt>
+        <dd>Compute constraint values for outcomes</dd>
+      </dl><dl><dt>
+          
+          <code><a href="compute_std_unit_contrib.html">compute_std_unit_contrib()</a></code> 
+        </dt>
+        <dd>Compute standardised contribution per unit based on coefficients</dd>
+      </dl><dl><dt>
+          
+          <code><a href="compute_stdcoef.html">compute_stdcoef()</a></code> 
+        </dt>
+        <dd>Compute standardise coefficients for contribution per unit</dd>
+      </dl><dl><dt>
+          
+          <code><a href="compute_total_contrib.html">compute_total_contrib()</a></code> 
+        </dt>
+        <dd>Compute total contribution for outcomes</dd>
+      </dl><dl><dt>
+          
           <code><a href="data_contrib.html">data_contrib</a></code> 
         </dt>
         <dd>Demo data: new diet contribution to nutrients and env impact</dd>
@@ -69,29 +97,34 @@
         <dd>Demo data: new diet comparison</dd>
       </dl><dl><dt>
           
+          <code><a href="f_make_constraint_function.html">f_make_constraint_function()</a></code> 
+        </dt>
+        <dd>Make inequality constraint functions based on constraint values</dd>
+      </dl><dl><dt>
+          
+          <code><a href="f_make_objective_function.html">f_make_objective_function()</a></code> 
+        </dt>
+        <dd>Make objective function based on current diet</dd>
+      </dl><dl><dt>
+          
+          <code><a href="find_new_diet.html">find_new_diet()</a></code> 
+        </dt>
+        <dd>New diet discovery</dd>
+      </dl><dl><dt>
+          
           <code><a href="foodname_group.html">foodname_group</a></code> 
         </dt>
         <dd>Macro food group (used for plotting purpose)</dd>
       </dl><dl><dt>
           
-          <code><a href="fplaceholder.html">fplaceholder()</a></code> 
-        </dt>
-        <dd>A placeholder function</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plot.diet_comparison_gram.html">plot(<i>&lt;diet_comparison_gram&gt;</i>)</a></code> 
+          <code><a href="plot_diet_comparison_gram.html">plot_diet_comparison_gram()</a></code> 
         </dt>
         <dd>Plotting function for diet comparison summary</dd>
       </dl><dl><dt>
           
-          <code><a href="plot.diet_comparison_percent.html">plot(<i>&lt;diet_comparison_percent&gt;</i>)</a></code> 
+          <code><a href="plot_diet_comparison_percent.html">plot_diet_comparison_percent()</a></code> 
         </dt>
         <dd>Plotting function for diet comparison summary</dd>
-      </dl><dl><dt>
-          
-          <code><a href="prep_contrib.html">prep_contrib()</a></code> 
-        </dt>
-        <dd>Summary table preparation for fast checking constraint fulfilment</dd>
       </dl><dl><dt>
           
           <code><a href="prep_diet_comparison_gram.html">prep_diet_comparison_gram()</a></code> 
@@ -104,15 +137,45 @@
         <dd>Make diet comparison summary table (percent change)</dd>
       </dl><dl><dt>
           
-          <code><a href="tab_contrib.html">tab_contrib()</a></code> 
+          <code><a href="reduce_constr.html">reduce_constr()</a></code> 
         </dt>
-        <dd>Make <code>gt</code> table for the diet contribution summary</dd>
+        <dd>Compute reduced constraint coefficients</dd>
+      </dl><dl><dt>
+          
+          <code><a href="return_new_diet.html">return_new_diet()</a></code> 
+        </dt>
+        <dd>Collect results from the new diet discovery</dd>
+      </dl><dl><dt>
+          
+          <code><a href="select_diet.html">select_diet()</a></code> 
+        </dt>
+        <dd>Select a set of foods</dd>
+      </dl><dl><dt>
+          
+          <code><a href="select_perunit.html">select_perunit()</a></code> 
+        </dt>
+        <dd>Select contribution per unit for nutrition and environmental impact outcomes</dd>
+      </dl><dl><dt>
+          
+          <code><a href="set_constr_coef.html">set_constr_coef()</a></code> 
+        </dt>
+        <dd>Set constraint coefficients</dd>
+      </dl><dl><dt>
+          
+          <code><a href="validate_diet_contrib.html">validate_diet_contrib()</a></code> 
+        </dt>
+        <dd>Compare new diet with current diet</dd>
+      </dl><dl><dt>
+          
+          <code><a href="values_by_tag_outcome.html">values_by_tag_outcome()</a></code> 
+        </dt>
+        <dd>Organize input values for outcomes</dd>
       </dl></div>
   </main></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Chi Zhang.</p>
+  <p></p><p>Developed by Chi Zhang, Julie Marie Lengle.</p>
 </div>
 
 <div class="pkgdown-footer-right">

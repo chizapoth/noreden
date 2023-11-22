@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">noreden</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,12 +36,15 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="articles/noreden.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/placeholder.html">Introduction to `noreden`</a>
+    <a class="dropdown-item" href="articles/visualize_results.html">Result visualization</a>
   </div>
 </li>
       </ul>
@@ -64,9 +67,43 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="noreden">NorEden<a class="anchor" aria-label="anchor" href="#noreden"></a>
+<div class="page-header"><h1 id="noreden-">noreden <img src="reference/figures/noreden.png" align="right" width="175"><a class="anchor" aria-label="anchor" href="#noreden-"></a>
 </h1></div>
-<p>The package <code>noreden</code> shall provide user-friendly functions and tools for nutrition researcher to explore diet design, under various nutritional and environmental constraints.</p>
+<!-- badges: start -->
+
+<p>The package <code>noreden</code> provides user-friendly functions and tools for nutrition researcher to explore diet design, under various nutritional and environmental constraints.</p>
+<div class="section level4">
+<h4 id="scope">Scope<a class="anchor" aria-label="anchor" href="#scope"></a>
+</h4>
+</div>
+<div class="section level4">
+<h4 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
+</h4>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="section level3">
+<h3 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
+</h3>
+<p>You can install the current development version from here,</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"andreaczhang/noreden"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="get-started">Get Started<a class="anchor" aria-label="anchor" href="#get-started"></a>
+</h2>
+<p>Read the <a href="">introductory vignette</a> or try the following example:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"></code></pre></div>
+<div class="section level3">
+<h3 id="citing-noreden">Citing <code>noreden</code>
+<a class="anchor" aria-label="anchor" href="#citing-noreden"></a>
+</h3>
+<p>To cite <code>noreden</code> please see <a href="">here</a></p>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
@@ -96,10 +133,16 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Chi Zhang <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Julie Marie Lengle <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
@@ -107,7 +150,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Chi Zhang.</p>
+<p>Developed by Chi Zhang, Julie Marie Lengle.</p>
 </div>
 
 <div class="pkgdown-footer-right">

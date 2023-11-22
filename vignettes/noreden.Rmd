@@ -1,0 +1,118 @@
+---
+title: "Introduction to `noreden`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to `noreden`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(noreden)
+```
+
+This is the first vignette document for how to use the package. 
+
+Let us try to load a dataset.
+
+```{r}
+head(all_diet)
+```
+
+
+```{r}
+head(contrib_per_unit)
+```
+
+
+## Select food and outcomes of interest
+
+Input data
+
+```{r}
+tag_food_9 <- c('Bread', 'Vegetables', 'Red meat', 
+              'Milk, yoghurt', 'Fish', 'Cheese', 
+              'Eggs', 'Fruit, berries', 'Potatoes')
+
+tag_outcome_7 <- c('energy', 'protein', 'carbs', 'fat', 
+                   'vitaminc',  'calcium', 'ghge')
+```
+
+
+
+```{r}
+diet_selected <- select_diet(
+  data_diet = all_diet,
+  tag_food = tag_food_9)
+
+diet_selected
+```
+
+
+```{r}
+cpu_selected <- select_perunit(
+  data_perunit_contrib = contrib_per_unit, 
+  tag_food = tag_food_9, 
+  tag_outcome = tag_outcome_7)
+cpu_selected
+```
+
+
+## Compute total contribution 
+
+For selected food and outcomes of interest
+
+
+```{r}
+tc <- compute_total_contrib(
+  data_diet = diet_selected, 
+  data_perunit_contrib = cpu_selected)
+
+tc
+```
+
+
+## Set constraints 
+
+```{r}
+constr_coef_df <- set_constr_coef(
+  tag_outcome = tag_outcome_7, 
+  coef_lwr = rep(0.9, length(tag_outcome_7)), 
+  coef_upr = rep(1.0, length(tag_outcome_7)))
+constr_coef_df
+```
+
+
+```{r}
+# reduce ghge to 0.9
+constr_coef_df_red <- reduce_constr(
+  data_constr_coef = constr_coef_df, 
+  tag_outcome_reduce = 'ghge', 
+  coef_reduce = 0.9)
+constr_coef_df_red
+```
+
+Use total contribution and constraint coefficients to compute the upper and lower bound
+
+```{r}
+cd_constr_raw_reduce <- compute_constr(
+  data_total_contrib = tc$total_contrib, 
+  data_constr_coef = constr_coef_df_red)
+
+cd_constr_raw_reduce
+```
+
+
+
+
+
+
+
+

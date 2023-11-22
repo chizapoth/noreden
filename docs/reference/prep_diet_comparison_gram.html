@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">noreden</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,13 +18,16 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/noreden.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/placeholder.html">Introduction to `noreden`</a>
+    <a class="dropdown-item" href="../articles/visualize_results.html">Result visualization</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -54,13 +57,20 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prep_diet_comparison_gram</span><span class="op">(</span><span class="va">data_dietsummary</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prep_diet_comparison_gram</span><span class="op">(</span></span>
+<span>  <span class="va">data_dietsummary</span>,</span>
+<span>  dref_foodgroup <span class="op">=</span> <span class="fu">noreden</span><span class="fu">::</span><span class="va"><a href="foodname_group.html">foodname_group</a></span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data_dietsummary</dt>
 <dd><p>a dataframe that contains x,y,z</p></dd>
+
+
+<dt>dref_foodgroup</dt>
+<dd><p>a reference dataframe to provide food group information</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -80,7 +90,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Chi Zhang.</p>
+  <p></p><p>Developed by Chi Zhang, Julie Marie Lengle.</p>
 </div>
 
 <div class="pkgdown-footer-right">

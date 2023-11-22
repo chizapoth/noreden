@@ -1,9 +1,10 @@
 Package: noreden
 Title: User-friendly functions and tools for nutrition researcher to explore diet design, under various nutritional and environmental constraints
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: 
     c(
-  person("Chi", "Zhang", email = "andreachizhang@yahoo.com", role = c("aut", "cre"))
+  person("Chi", "Zhang", email = "andreachizhang@yahoo.com", role = c("aut", "cre")), 
+  person("Julie", "Marie Lengle", email = "j.m.lengle@medisin.uio.no", role = c("aut"))
   )
 Description: User-friendly functions and tools for nutrition researcher to explore diet design, under various nutritional and environmental constraints.
 License: MIT + file LICENSE
