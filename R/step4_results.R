@@ -58,7 +58,8 @@ compare_new_diet <- function(data_new_diet,
                      current_upr = intake_upr)
   d <- dplyr::mutate(d, 
                      abs_change = (new - current), 
-                     perc_change = (new - current)/current)
+                     perc_change = (new - current)/current)|> 
+    dplyr::mutate_if(is.numeric, round, 2)
   
   return(d)
 }
@@ -102,17 +103,18 @@ validate_diet_contrib <- function(data_new_diet,
   # put together, modify name
   tc_both <- dplyr::left_join(d_tc_new, data_constr, by = 'tag_outcome')
   
-  tc_both <- mutate(tc_both, check = dplyr::case_when(
+  tc_both <- dplyr::mutate(tc_both, check = dplyr::case_when(
     total_contrib_new > constr_upr ~ 'beyond_upper', 
     total_contrib_new < constr_lwr ~ 'beyond_lwr',
     .default = 'ok'
   ))
   
-  tc_both <- mutate(tc_both, deviation = dplyr::case_when(
+  tc_both <- dplyr::mutate(tc_both, deviation = dplyr::case_when(
     check == 'beyond_upper' ~ round((total_contrib_new - constr_upr)/constr_upr,3), 
     check == 'beyond_lower' ~ round((total_contrib_new - constr_lwr)/constr_lwr,3), 
     .default = 0
-  ))
+  ))|> 
+    dplyr::mutate_if(is.numeric, round, 2)
   
   return(tc_both)
   

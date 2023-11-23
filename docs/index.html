@@ -41,12 +41,6 @@
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/visualize_results.html">Result visualization</a>
-  </div>
-</li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -75,10 +69,19 @@
 <div class="section level4">
 <h4 id="scope">Scope<a class="anchor" aria-label="anchor" href="#scope"></a>
 </h4>
+<ul>
+<li>New diet discovery based on current Norwegian dietary survey, subject to nutritional and environmental impact inequality constraints</li>
+<li>Quadratic Programming (QP) implemented by <code>nloptr</code>
+</li>
+</ul>
 </div>
 <div class="section level4">
 <h4 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
 </h4>
+<ul>
+<li>Flexible constraint specification via coefficient</li>
+<li>Tidy results with tabular and visual presentation</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -86,7 +89,7 @@
 <div class="section level3">
 <h3 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
 </h3>
-<p>You can install the current development version from here,</p>
+<p>The package is being actively developed. If you wish to test and contribute to the project, you can download from here,</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"andreaczhang/noreden"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -94,14 +97,12 @@
 <div class="section level2">
 <h2 id="get-started">Get Started<a class="anchor" aria-label="anchor" href="#get-started"></a>
 </h2>
-<p>Read the <a href="">introductory vignette</a> or try the following example:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"></code></pre></div>
+<p>Read the <a href="https://andreaczhang.github.io/noreden/articles/noreden.html">introductory vignette</a> for more information.</p>
 <div class="section level3">
 <h3 id="citing-noreden">Citing <code>noreden</code>
 <a class="anchor" aria-label="anchor" href="#citing-noreden"></a>
 </h3>
-<p>To cite <code>noreden</code> please see <a href="">here</a></p>
+<p>To cite <code>noreden</code> please see <a href="https://andreaczhang.github.io/noreden/authors.html#citation">here</a></p>
 </div>
 </div>
 </div>

@@ -14,61 +14,79 @@ knitr::opts_chunk$set(
 )
 ```
 
+`noreden` provides user-friendly functions to facilitate sustainable diet discovery. Given information for food (groups) and their nutritional and environmental impact information, the aim is to find a new diet (i.e. set of foods) that is healthy, acceptable, yet more sustainable in terms of environmenal impact. 
+
+The optimization problem implemented minimizes the difference between the current and new target diet, subject to a set of inequality constraints with respect to nutrition and environmental impact. More details can be found in this document: [Optimization](https://andreaczhang.github.io/noreden/articles/noreden.html) (*replace link*)
+
+In order to find a new diet, you need the following input data: 
+
+* **current diet**: food group names and intake (gram) for each food group
+* **nutrition (per unit)**: used to compute total nutrition, such as energy, protein.
+* **environment impact (per unit)**: used to compute total impact, such as ghge (green house gas emission)
+* **constraint**: we implement two inequality constraints for each nutrition / env impact, such that the total amount ('contribution') falls within a range. In this package the values are based on current diet's total contribution.
+
+# An example
+
+We use a simple example to demonstrate the main features of the package. To get started, load the package.
+
 ```{r setup}
 library(noreden)
 ```
 
-This is the first vignette document for how to use the package. 
 
-Let us try to load a dataset.
+
+## Process input
+
+We need some information on the current diet we wish to optimize. For now, we use the average diet summarized from a Norwegian dietary survey. However in the future we shall implement flexible input options so that you can insert it yourself.
 
 ```{r}
 head(all_diet)
 ```
 
+We also need the contribution per unit (refered to as `cpu`) for each of the food. The food unit is per gram, and units for nutrition and environmental impact depends on the outcome. 
 
 ```{r}
 head(contrib_per_unit)
 ```
 
 
-## Select food and outcomes of interest
+### Select food and outcomes of interest
 
-Input data
+We select 12 foods, and 5 outcomes of interest.
 
 ```{r}
-tag_food_9 <- c('Bread', 'Vegetables', 'Red meat', 
-              'Milk, yoghurt', 'Fish', 'Cheese', 
-              'Eggs', 'Fruit, berries', 'Potatoes')
+tag_food_12 <- c('Bread', 'Vegetables', 'Red meat', 
+                'Milk, yoghurt', 'Fish', 'Cheese', 
+                'Eggs', 'Fruit, berries', 'Potatoes', 
+                'Other grains', 'Butter, margarine, oil', 'Sugar, sweets')
 
-tag_outcome_7 <- c('energy', 'protein', 'carbs', 'fat', 
-                   'vitaminc',  'calcium', 'ghge')
+tag_outcome_5 <- c('energy', 'protein', 'carbs', 'fat', 'ghge')
 ```
 
-
+For the current diet selection, we get the average diet (`intake_mean`) as a baseline, from which we search for a new diet that satisfy our requirements; in addition, we also get the upper and lower bound for the new diet so that it is not too far from the current one. 
 
 ```{r}
 diet_selected <- select_diet(
   data_diet = all_diet,
-  tag_food = tag_food_9)
+  tag_food = tag_food_12)
 
 diet_selected
 ```
 
+Do the same for outcomes on selected foods.
 
 ```{r}
 cpu_selected <- select_perunit(
   data_perunit_contrib = contrib_per_unit, 
-  tag_food = tag_food_9, 
-  tag_outcome = tag_outcome_7)
+  tag_food = tag_food_12, 
+  tag_outcome = tag_outcome_5)
 cpu_selected
 ```
 
 
 ## Compute total contribution 
 
-For selected food and outcomes of interest
-
+We compute the total contribution of the food combination. This is the basis when we search for new diet that satisfies the nutrition and environmental constraints.
 
 ```{r}
 tc <- compute_total_contrib(
@@ -81,14 +99,24 @@ tc
 
 ## Set constraints 
 
+The inequality constraints look like this:
+
+* total energy <= upper bound for energy
+* total energy >= lower bound for energy
+
+By default we can set the upper bound to be the same as the current total outputs, and lower bound to be 90% of the current total outputs.
+
+
 ```{r}
 constr_coef_df <- set_constr_coef(
-  tag_outcome = tag_outcome_7, 
-  coef_lwr = rep(0.9, length(tag_outcome_7)), 
-  coef_upr = rep(1.0, length(tag_outcome_7)))
+  tag_outcome = tag_outcome_5, 
+  coef_lwr = rep(0.9, length(tag_outcome_5)), 
+  coef_upr = rep(1.0, length(tag_outcome_5)))
 constr_coef_df
 ```
 
+
+When we try to reduce the output in a specific outcome (such as ghge), we can set it to be 90% the previous level: the function `reduce_constr()` allows you to set it.
 
 ```{r}
 # reduce ghge to 0.9
@@ -99,20 +127,141 @@ constr_coef_df_red <- reduce_constr(
 constr_coef_df_red
 ```
 
-Use total contribution and constraint coefficients to compute the upper and lower bound
+Use total contribution and constraint coefficients to compute the upper and lower bound.
 
 ```{r}
-cd_constr_raw_reduce <- compute_constr(
+constr_val_reduce <- compute_constr(
   data_total_contrib = tc$total_contrib, 
   data_constr_coef = constr_coef_df_red)
+constr_val_reduce
+```
 
-cd_constr_raw_reduce
+
+### Set standardized constraints
+
+Sometimes it is better for computaion to use standardized values rather than the original. We have implemented one way to standardize.
+
+```{r}
+stdcoef <- compute_stdcoef(data_perunit_contrib = cpu_selected)
+stdcoef
+
+cpu_selected_std_res <- compute_std_unit_contrib(
+  uc_raw = cpu_selected,
+  std_coef = stdcoef$std_coef)
+
+cpu_selected_std <- cpu_selected_std_res$uc_std
+
+# total contrib (std)
+tc_std <- compute_total_contrib(
+  data_diet = diet_selected, 
+  data_perunit_contrib = cpu_selected_std)
+tc_std
+```
+
+
+Now we directly use the 90% ghge constraint coefficients.
+
+```{r}
+# constraints based on std total contrib
+constr_val_reduce_std <- compute_constr(
+  data_total_contrib = tc_std$total_contrib, 
+  data_constr_coef = constr_coef_df_red)
+
+constr_val_reduce_std
 ```
 
 
 
+## Find new diet
+
+In order to run the algorithm to search for new diet, we need to provide the algorithm the data we prepared from previous steps in a format that is ordered by outcome.
+
+Here we use the standardized constraints for numerical stability.
+
+```{r}
+# split constraint values 
+constval <- values_by_tag_outcome(
+  data_unit_contrib = cpu_selected_std, 
+  data_constr = constr_val_reduce_std)
+
+constval$food_name
+constval$tag_outcome
+
+# for energy, unit_contrib per food, lwr and upr bound of total contrib
+constval$val$energy
+```
 
 
+Run the optimization, and retrieve the new diet along with current diet.
+
+```{r}
+res <- find_new_diet(diet0 = diet_selected$intake_mean, 
+                     diet0_upr = diet_selected$intake_upr, 
+                     diet0_lwr = diet_selected$intake_lwr, 
+                     tag_outcomes = tag_outcome_5, 
+                     constraint_val = constval$val, 
+                     print_runtime = T)
+# collect result
+new_diet <- return_new_diet(
+  result_obj = res$run_optim, 
+  data_current_diet = diet_selected)
+new_diet
+```
 
 
+## Present the results
+
+We can show some useful comparisons between the two diets, in terms of absolute and relative percent change.
+
+```{r}
+# compute difference
+new_old_compare <- compare_new_diet(data_new_diet = new_diet, 
+                 data_current_diet = diet_selected)
+
+new_old_compare
+```
+
+
+We can also validate whether the new diet satisfies the constraints.
+
+```{r}
+# validate constraints
+new_diet_validate <- validate_diet_contrib(data_new_diet = new_diet, 
+                      data_unit_contrib = cpu_selected,
+                      data_constr = constr_val_reduce)
+
+new_diet_validate
+```
+
+
+It is possible to visualize the results or present results in better looking tables. 
+
+```{r}
+d_compare_gram <- prep_diet_comparison_gram(
+  new_old_compare)
+
+p1 <- plot_diet_comparison_gram(plot_obj = d_compare_gram,
+                          title_text = 'New diet',
+                          axis_x_text = 'Food groups',
+                          axis_y_text = 'Intake (grams)')
+
+d_compare_percent <- prep_diet_comparison_percent(
+  data_dietsummary = new_old_compare)
+
+p2 <- plot_diet_comparison_percent(plot_obj = d_compare_percent,
+                                   title_text = 'Percent change',
+                                   axis_x_text = 'Food groups',
+                                   axis_y_text = 'Percent')
+
+library(patchwork)
+p1 + p2 + plot_layout(nrow = 1)
+```
+
+Table with comments.
+
+```{r}
+d_tb_validate <- prep_validate_table(
+  data_validate_diet = new_diet_validate)
+table_validate(d_tb_validate)
+```
 

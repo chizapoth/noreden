@@ -48,7 +48,7 @@ f_make_objective_function <- function(diet0, method = 'ss'){
 
 f_make_constraint_function <- function(constraint_values, tag_outcomes){
   
-  # constraint_values <- constval$val_std
+  # constraint_values <- constval$val
   # tag_outcomes <- c('energy', 'ghge')
   
   

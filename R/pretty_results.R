@@ -19,6 +19,7 @@ prep_diet_comparison_gram <- function(data_dietsummary,
   new <- NULL
   group_macro <- NULL
   # dref_foodgroup <- noreden::foodname_group
+  # data_dietsummary <- new_old_compare
   
   d <- data_dietsummary
   # add group_macro
@@ -134,7 +135,7 @@ prep_diet_comparison_percent <- function(data_dietsummary,
   
   food_name <- NULL
   group_macro <- NULL
-  percent_change <- NULL
+  perc_change <- NULL
   
   
   d <- data_dietsummary
@@ -145,7 +146,7 @@ prep_diet_comparison_percent <- function(data_dietsummary,
                           by = 'food_name')
   }
   # select
-  pd <- dplyr::select(d, c(food_name, group_macro, percent_change))
+  pd <- dplyr::select(d, c(food_name, group_macro, perc_change))
   # order
   name_ordered <- dref_foodgroup$food_name
   pd$food_name_ordered <- factor(pd$food_name, 
@@ -196,7 +197,7 @@ plot_diet_comparison_percent <- function(plot_obj,
   # need to match the column names
   
   p <- ggplot(data = pd, aes(x = food_name_ordered, 
-                               y = percent_change, 
+                               y = perc_change, 
                                fill = group_macro))
   
   p <- p + geom_bar(position = 'dodge', 
@@ -204,14 +205,14 @@ plot_diet_comparison_percent <- function(plot_obj,
                       alpha = 0.7)
   p <- p + coord_flip()
   # add percentage text to the right
-  p <- p + geom_text(aes(label = round(percent_change, 1)), 
-                       y = max(pd$percent_change)*1.3,
+  p <- p + geom_text(aes(label = round(perc_change, 1)), 
+                       y = max(pd$perc_change)*1.3,
                        color = 'black', 
                        size = 4)
   
   # set limit 
-  pc_max <- max(pd$percent_change)
-  pc_min <- min(pd$percent_change)
+  pc_max <- max(pd$perc_change)
+  pc_min <- min(pd$perc_change)
   p <- p + ylim(pc_min - 0.1*(pc_max - pc_min), 
                 pc_max + 0.1*(pc_max - pc_min))
   # theme
@@ -230,6 +231,112 @@ plot_diet_comparison_percent <- function(plot_obj,
   p
   
 }
+
+
+
+# tables ----
+
+#' Summary table preparation for fast checking constraint fulfilment
+#'
+#' @param data_contrib summary table from the results
+#' @param demo T or F, is this for demonstration
+#'
+#' @return a dataframe
+#' @export
+
+prep_validate_table <- function(data_validate_diet){
+  
+  # data_validate_diet <- new_diet_validate
+  td <- dplyr::select(data_validate_diet, 
+                      tag_outcome, 
+                      tc_new = total_contrib_new, 
+                      tc_current = total_contrib, 
+                      min = constr_lwr,
+                      max = constr_upr, 
+                      check, 
+                      deviation) |> 
+    dplyr::mutate_if(is.numeric, round, 2)
+  
+  td <- dplyr::mutate(td, check = dplyr::case_when(
+    check == 'beyond_upper' ~ paste0(abs(deviation), '% above'), 
+    check == 'beyond_lower' ~ paste0(abs(deviation), '% below'), 
+    .default = 'Ok'
+  )) |> dplyr::select(-deviation)
+  
+  
+  # drop columns
+  #td[, is_ok := NULL]
+  #td[, dev_if_not_ok := NULL]
+  
+  result <- list(data_validate_diet = data_validate_diet, 
+                 gt_data = td)
+  # result <- structure(result, class = 'diet_comparison_percent')
+  return(result)
+}
+
+
+
+#' Make `gt` table for the diet contribution summary
+#'
+#' @param tab_obj a table object from prep_contrib()
+#'
+#' @return a `gt` table with coloring
+#' @import gt
+#' @export
+
+table_validate <- function(tab_obj){
+  
+  td <- tab_obj$gt_data
+  # make gt table
+  gtt <- gt(td)
+  # merge min and max in one col
+  gtt <- cols_merge(gtt, 
+                    columns = c(min, max), 
+                    pattern = "{1}&dash;{2}")
+  
+  # add header
+  gtt <- tab_spanner(gtt, 
+                     label = md("**Total contribution**"), 
+                     columns = c(tc_new, tc_current))
+  
+  gtt <- tab_spanner(gtt, 
+                     label = md("**Constraint**"), 
+                     columns = c(min, check))
+  # change text
+  gtt <- cols_label(gtt, 
+                    tag_outcome = 'Outcome', 
+                    tc_new = 'New diet', 
+                    tc_current = "Current diet", 
+                    min = "Range", 
+                    check = 'Comments')
+  
+  # center checker column
+  gtt <- cols_align(gtt, align = 'center', columns = check)
+  
+  # boldface tc new
+  gtt <- tab_style(gtt, 
+                   locations = cells_body(columns = tc_new), 
+                   style = cell_text(weight = 'bold'))
+  # add color: blue for below, red for above
+  gtt <- tab_style(gtt, 
+                   locations = cells_body(
+                     columns = c(tc_new, check), 
+                     rows = (tc_new < tc_current)&check != 'Ok'), 
+                   style = cell_fill(color = 'lightblue', alpha = 0.8))
+  
+  gtt <- tab_style(gtt, 
+                   locations = cells_body(
+                     columns = c(tc_new, check), 
+                     rows = (tc_new > tc_current)&check != 'Ok'), 
+                   style = cell_fill(color = 'lightcoral', alpha = 0.8))
+  gtt
+  
+  return(gtt)
+}
+
+
+
+
 
 
 
