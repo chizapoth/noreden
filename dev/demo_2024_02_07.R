@@ -7,32 +7,187 @@ all_diet
 
 all_diet$food_name
 
+
+all_food_names <- c('Bread', 
+                    'Other grains', 
+                    'Cakes', 
+                    'Potatoes', 
+                    'Vegetables', 
+                    'Legumes', 
+                    'Fruit, berries', 
+                    'Juice', 
+                    'Nuts', 
+                    'Vegetarian products', 
+                    'Red meat', 
+                    'White meat', 
+                    'Fish', 
+                    'Eggs', 
+                    'Cream, cream desserts', 
+                    'Milk, yoghurt',
+                    'Cheese', 
+                    'Butter, margarine, oil',
+                    'Sugar, sweets', 
+                    'Coffee, tea', 
+                    'Soda, saft', 
+                    'Water', 
+                    'Alcoholic beverages',
+                    'Non-dairy milk',
+                    'Snacks',
+                    'Sauces',
+                    'Spices',
+                    'Other')
+
 # contrib per unit 
 contrib_per_unit
 
 
 # set your parameters ----
-tag_food_12 <- c('Bread', 
-                 'Vegetables', 
-                 'Red meat', 
-                 'Milk, yoghurt', 
-                 'Fish', 
-                 'Cheese', 
-                 'Eggs', 
-                 # 'Fruit, berries', 
-                 'Potatoes', 
-                 # 'Other grains', 
-                 'Butter, margarine, oil', 
-                 'Sugar, sweets'
-                 )
+# tag_food_12 <- c('Bread', 
+#                  'Vegetables', 
+#                  'Red meat', 
+#                  'Milk, yoghurt', 
+#                  'Fish', 
+#                  'Cheese', 
+#                  'Eggs', 
+#                  'Fruit, berries', 
+#                  'Potatoes', 
+#                  'Other grains', 
+#                  'Butter, margarine, oil', 
+#                  'Sugar, sweets'
+#                  )
 
 tag_outcome_5 <- c('energy', 'protein', 'carbs', 'fat', 'ghge')
 
 
+FD1 <- c('Bread', 
+                    'Other grains', 
+                    #'Cakes', 
+                    'Potatoes', 
+                    'Vegetables', 
+                    'Legumes', 
+                    'Fruit, berries', 
+                    'Juice', 
+                    'Nuts', 
+                    #'Vegetarian products', 
+                    #'Red meat', 
+                    'White meat', 
+                    'Fish', 
+                    'Eggs', 
+                    'Cream, cream desserts', 
+                    #'Milk, yoghurt',
+                    #'Cheese', 
+                    'Butter, margarine, oil',
+                    'Sugar, sweets', 
+                    'Coffee, tea', 
+                    #'Soda, saft', 
+                    'Water')
+                    #'Alcoholic beverages',
+                    #'Non-dairy milk',
+                    #'Snacks',
+                    #'Sauces',
+                   # 'Spices',
+                    #'Other'
+                    #'
+
+
+FD2 <- c('Bread', 
+                    #'Other grains', 
+                    'Cakes', 
+                    'Potatoes', 
+                    'Vegetables', 
+                    #'Legumes', 
+                    'Fruit, berries', 
+                    #'Juice', 
+                    #'Nuts', 
+                    #'Vegetarian products', 
+                    #'Red meat', 
+                    'White meat', 
+                    'Fish', 
+                    'Eggs', 
+                    'Cream, cream desserts', 
+                    'Milk, yoghurt',
+                    'Cheese', 
+                    'Butter, margarine, oil',
+                    'Sugar, sweets', 
+                    'Coffee, tea', 
+                    #'Soda, saft', 
+                    'Water', 
+                    #'Alcoholic beverages',
+                    #'Non-dairy milk',
+                    #'Snacks',
+                    #'Sauces',
+                    'Spices')#,
+                    #'Other')
+
+FD3 <- c('Bread', 
+                    'Other grains', 
+                    'Cakes', 
+                    #'Potatoes', 
+                    'Vegetables', 
+                    'Legumes', 
+                    'Fruit, berries', 
+                    #'Juice', 
+                    #'Nuts', 
+                    'Vegetarian products', 
+                    #'Red meat', 
+                    #'White meat', 
+                    'Fish', 
+                    'Eggs', 
+                    #'Cream, cream desserts', 
+                    'Milk, yoghurt',
+                    'Cheese', 
+                    #'Butter, margarine, oil',
+                    #'Sugar, sweets', 
+                    'Coffee, tea', 
+                    'Soda, saft', 
+                    'Water')#, 
+                    #'Alcoholic beverages',
+                    #'Non-dairy milk',
+                    #'Snacks',
+                    #'Sauces',
+                    #'Spices',
+                    #'Other')
+
+
+FD4 <- c(#'Bread', 
+                   # 'Other grains', 
+                    #'Cakes', 
+                    #'Potatoes', 
+                    'Vegetables', 
+                    'Legumes', 
+                    'Fruit, berries', 
+                    #'Juice', 
+                    'Nuts', 
+                    #'Vegetarian products', 
+                    'Red meat', 
+                    'White meat', 
+                    'Fish', 
+                    #'Eggs', 
+                    #'Cream, cream desserts', 
+                    #'Milk, yoghurt',
+                    'Cheese', 
+                    'Butter, margarine, oil',
+                    'Sugar, sweets', 
+                    'Coffee, tea', 
+                    'Soda, saft', 
+                    #'Water', 
+                    #'Alcoholic beverages',
+                    #'Non-dairy milk',
+                    #'Snacks',
+                    #'Sauces',
+                    'Spices')#,
+                    #'Other')
+
+
 # run these two lines
-TAG_FOOD <- tag_food_12
+# TAG_FOOD <- FD1
+#TAG_FOOD <- FD2
+#TAG_FOOD <- FD3
+TAG_FOOD <- FD4
+
+
 TAG_OUTCOME <- tag_outcome_5
-COEF_REDUCE <- 0.9
+COEF_REDUCE <- 0.6
 
 
 # select food and cpu ----
