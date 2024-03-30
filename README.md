@@ -35,6 +35,7 @@ devtools::install_github("andreaczhang/noreden")
 
 Read the [introductory vignette](https://andreaczhang.github.io/noreden/articles/noreden.html) for more information.
 
+T
 
 
 ### Citing `noreden`
