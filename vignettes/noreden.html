@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to noreden</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to <code>noreden</code></h1>
+
+
+
+<p><code>noreden</code> provides user-friendly functions to facilitate
+sustainable diet discovery. Given information for food (groups) and
+their nutritional and environmental impact information, the aim is to
+find a new diet (i.e. set of foods) that is healthy, acceptable, yet
+more sustainable in terms of environmental impact.</p>
+<p>The optimization problem implemented minimizes the <strong>difference
+between the current and new target diet</strong>, subject to a set of
+inequality constraints with respect to nutrition and environmental
+impact. More details can be found in this document: <a href="https://ocbe-uio.github.io/noreden_doc/documentation/">Optimization
+for NorEden</a>.</p>
+<p>In order to find a new diet, you need the following input data:</p>
+<ul>
+<li><strong>current diet</strong>: food group names and intake (gram)
+for each food group</li>
+<li><strong>nutrition (per unit)</strong>: used to compute total
+nutrition, such as energy, protein.</li>
+<li><strong>environment impact (per unit)</strong>: used to compute
+total impact, such as ghge (green house gas emission)</li>
+<li><strong>constraint</strong>: we implement two inequality constraints
+for each nutrition / env impact, such that the total amount
+(‘contribution’) falls within a range. In this package the values are
+based on current diet’s total contribution.</li>
+</ul>
+<div id="an-example" class="section level1">
+<h1>An example</h1>
+<p>We use a simple example to demonstrate the main features of the
+package. To get started, load the package.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(noreden)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Loading required package: ggplot2</span></span></code></pre></div>
+<div id="process-input" class="section level2">
+<h2>Process input</h2>
+<p>We need some information on the current diet we wish to optimize. For
+now, we use the <strong>average diet</strong> summarized from a
+Norwegian dietary survey. However in the future, we shall implement
+flexible input options so that you can insert the data yourself.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">head</span>(all_diet)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 4</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;   food_name    intake_mean intake_lwr intake_upr</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 1 Bread             188.       18.8        344. </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 2 Other grains       48.3       4.83       156. </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 3 Cakes              38.2       3.82       142. </span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 4 Potatoes           72.8       7.28       231. </span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 5 Vegetables        166.       16.6        420. </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 6 Legumes             3.76      0.376       30.7</span></span></code></pre></div>
+<p>We also need the <strong>contribution per unit</strong> (referred to
+as <code>cpu</code>) for each of the food. The food unit is per gram,
+and units for nutrition and environmental impact depends on the
+outcome.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">head</span>(contrib_per_unit)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 10</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   food_name    energy protein  carbs   sugar  fiber     fat vitaminc calcium</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1 Bread         10.7   0.0912 0.441  0.00285 0.0633 0.0302   0.00570  0.336 </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 2 Other grains  14.0   0.1    0.607  0.0133  0.0578 0.0422   0        0.4   </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 3 Cakes         14.2   0.0674 0.424  0.185   0.0225 0.152    0        0.590 </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 4 Potatoes       3.79  0.0206 0.178  0       0.0177 0.00737  0.133    0.0885</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 5 Vegetables     1.57  0.0149 0.0498 0.00517 0.0207 0.00841  0.207    0.259 </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 6 Legumes        8.57  0.143  0.286  0       0.0857 0.0286   0        0.571 </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; # ℹ 1 more variable: ghge &lt;dbl&gt;</span></span></code></pre></div>
+<div id="select-food-and-outcomes-of-interest" class="section level3">
+<h3>Select food and outcomes of interest</h3>
+<p>We select 12 foods, and 5 outcomes of interest.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>tag_food_12 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;Bread&#39;</span>, <span class="st">&#39;Vegetables&#39;</span>, <span class="st">&#39;Red meat&#39;</span>, </span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                <span class="st">&#39;Milk, yoghurt&#39;</span>, <span class="st">&#39;Fish&#39;</span>, <span class="st">&#39;Cheese&#39;</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                <span class="st">&#39;Eggs&#39;</span>, <span class="st">&#39;Fruit, berries&#39;</span>, <span class="st">&#39;Potatoes&#39;</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                <span class="st">&#39;Other grains&#39;</span>, <span class="st">&#39;Butter, margarine, oil&#39;</span>, <span class="st">&#39;Sugar, sweets&#39;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>tag_outcome_5 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;energy&#39;</span>, <span class="st">&#39;protein&#39;</span>, <span class="st">&#39;carbs&#39;</span>, <span class="st">&#39;fat&#39;</span>, <span class="st">&#39;ghge&#39;</span>)</span></code></pre></div>
+<p>For the current diet selection, we get the average diet
+(<code>intake_mean</code>) as a baseline, from which we search for a new
+diet that satisfy our requirements; in addition, we also get the upper
+and lower bound for the new diet so that it is not too far from the
+current one.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>diet_selected <span class="ot">&lt;-</span> <span class="fu">select_diet</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">data_diet =</span> all_diet,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">tag_food =</span> tag_food_12)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>diet_selected</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 12 × 4</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;    food_name              intake_mean intake_lwr intake_upr</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;                        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt;  1 Bread                        188.       18.8       344. </span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;  2 Other grains                  48.3       4.83      156. </span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;  3 Potatoes                      72.8       7.28      231. </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt;  4 Vegetables                   166.       16.6       420. </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;  5 Fruit, berries               184.       18.4       553. </span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;  6 Red meat                     126.       12.6       300. </span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;  7 Fish                          74.6       7.46      303. </span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt;  8 Eggs                          26.4       2.64      112. </span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;  9 Milk, yoghurt                329.       32.9       901. </span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; 10 Cheese                        46.6       4.66      122. </span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; 11 Butter, margarine, oil        32.3       3.23       71.4</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; 12 Sugar, sweets                 18.1       1.81       66</span></span></code></pre></div>
+<p>Do the same for outcomes on selected foods.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>cpu_selected <span class="ot">&lt;-</span> <span class="fu">select_perunit</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">data_perunit_contrib =</span> contrib_per_unit, </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">tag_food =</span> tag_food_12, </span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">tag_outcome =</span> tag_outcome_5)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>cpu_selected</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 12 × 6</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;    food_name              energy protein   carbs     fat    ghge</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;                   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;  1 Bread                   10.7  0.0912  0.441   0.0302  0.00107</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;  2 Other grains            14.0  0.1     0.607   0.0422  0.00235</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;  3 Potatoes                 3.79 0.0206  0.178   0.00737 0.00037</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;  4 Vegetables               1.57 0.0149  0.0498  0.00841 0.00103</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;  5 Fruit, berries           2.73 0.00758 0.134   0.00408 0.00072</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;  6 Red meat                 8.34 0.173   0.0136  0.139   0.0129 </span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;  7 Fish                     6.09 0.170   0.0245  0.0748  0.00311</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;  8 Eggs                     6.18 0.130   0.00407 0.106   0.00215</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt;  9 Milk, yoghurt            1.98 0.0359  0.0559  0.0111  0.00143</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 10 Cheese                  13.5  0.217   0.0484  0.242   0.0103 </span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; 11 Butter, margarine, oil  23.4  0.0133  0.0233  0.615   0.00467</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; 12 Sugar, sweets           18.0  0.0533  0.609   0.178   0.00387</span></span></code></pre></div>
+</div>
+</div>
+<div id="compute-total-contribution" class="section level2">
+<h2>Compute total contribution</h2>
+<p>We compute the total contribution of the food combination. This is
+the basis when we search for new diet that satisfies the nutrition and
+environmental constraints.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>tc <span class="ot">&lt;-</span> <span class="fu">compute_total_contrib</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">data_diet =</span> diet_selected, </span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">data_perunit_contrib =</span> cpu_selected)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>tc</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; $total_contrib</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;   tag_outcome total_contrib</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 1      energy   7762.508053</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 2     protein     88.576337</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 3       carbs    194.438480</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 4         fat     74.404123</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 5        ghge      3.739236</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; $tag_food</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;Bread&quot;                  &quot;Other grains&quot;           &quot;Potatoes&quot;              </span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Vegetables&quot;             &quot;Fruit, berries&quot;         &quot;Red meat&quot;              </span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Fish&quot;                   &quot;Eggs&quot;                   &quot;Milk, yoghurt&quot;         </span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Cheese&quot;                 &quot;Butter, margarine, oil&quot; &quot;Sugar, sweets&quot;         </span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; $tag_outcome</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; [1] &quot;energy&quot;  &quot;protein&quot; &quot;carbs&quot;   &quot;fat&quot;     &quot;ghge&quot;</span></span></code></pre></div>
+</div>
+<div id="set-constraints" class="section level2">
+<h2>Set constraints</h2>
+<p>The inequality constraints look like this:</p>
+<ul>
+<li>total energy &lt;= upper bound for energy</li>
+<li>total energy &gt;= lower bound for energy</li>
+</ul>
+<p>By default we can set the upper bound to be the same as the current
+total outputs, and lower bound to be 90% of the current total
+outputs.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>constr_coef_df <span class="ot">&lt;-</span> <span class="fu">set_constr_coef</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="at">tag_outcome =</span> tag_outcome_5, </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">coef_lwr =</span> <span class="fu">rep</span>(<span class="fl">0.9</span>, <span class="fu">length</span>(tag_outcome_5)), </span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">coef_upr =</span> <span class="fu">rep</span>(<span class="fl">1.0</span>, <span class="fu">length</span>(tag_outcome_5)))</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>constr_coef_df</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt;   tag_outcome coef_constrlwr coef_construpr</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 1      energy            0.9              1</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 2     protein            0.9              1</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 3       carbs            0.9              1</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 4         fat            0.9              1</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 5        ghge            0.9              1</span></span></code></pre></div>
+<p>When we try to reduce the output in a specific outcome (such as
+ghge), we can set it to be 90% the previous level: the function
+<code>reduce_constr()</code> allows you to set it.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># reduce ghge to 0.9</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>constr_coef_df_red <span class="ot">&lt;-</span> <span class="fu">reduce_constr</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">data_constr_coef =</span> constr_coef_df, </span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">tag_outcome_reduce =</span> <span class="st">&#39;ghge&#39;</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">coef_reduce =</span> <span class="fl">0.9</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>constr_coef_df_red</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt;   tag_outcome coef_constrlwr coef_construpr</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; 1      energy           0.90            1.0</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; 2     protein           0.90            1.0</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; 3       carbs           0.90            1.0</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; 4         fat           0.90            1.0</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; 5        ghge           0.81            0.9</span></span></code></pre></div>
+<p>Use total contribution and constraint coefficients to compute the
+upper and lower bound.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>constr_val_reduce <span class="ot">&lt;-</span> <span class="fu">compute_constr</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">data_total_contrib =</span> tc<span class="sc">$</span>total_contrib, </span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">data_constr_coef =</span> constr_coef_df_red)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>constr_val_reduce</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt;   tag_outcome total_contrib coef_constrlwr coef_construpr  constr_lwr</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; 1      energy   7762.508053           0.90            1.0 6986.257248</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; 2     protein     88.576337           0.90            1.0   79.718703</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; 3       carbs    194.438480           0.90            1.0  174.994632</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 4         fat     74.404123           0.90            1.0   66.963711</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; 5        ghge      3.739236           0.81            0.9    3.028781</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt;    constr_upr</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; 1 7762.508053</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; 2   88.576337</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; 3  194.438480</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 4   74.404123</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 5    3.365312</span></span></code></pre></div>
+<div id="set-standardized-constraints" class="section level3">
+<h3>Set standardized constraints</h3>
+<p>Sometimes it is better for computaion to use standardized values
+rather than the original. We have implemented one way to
+standardize.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>stdcoef <span class="ot">&lt;-</span> <span class="fu">compute_stdcoef</span>(<span class="at">data_perunit_contrib =</span> cpu_selected)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>stdcoef</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; $std_coef</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt;   tag_outcome    std_coef</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; 1      energy   0.1449335</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; 2     protein  13.7615608</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; 3       carbs   4.3037780</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; 4         fat   5.7738141</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; 5        ghge 251.6962095</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt; $method</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;sd&quot;</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>cpu_selected_std_res <span class="ot">&lt;-</span> <span class="fu">compute_std_unit_contrib</span>(</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>  <span class="at">uc_raw =</span> cpu_selected,</span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>  <span class="at">std_coef =</span> stdcoef<span class="sc">$</span>std_coef)</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>cpu_selected_std <span class="ot">&lt;-</span> cpu_selected_std_res<span class="sc">$</span>uc_std</span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co"># total contrib (std)</span></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>tc_std <span class="ot">&lt;-</span> <span class="fu">compute_total_contrib</span>(</span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a>  <span class="at">data_diet =</span> diet_selected, </span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a>  <span class="at">data_perunit_contrib =</span> cpu_selected_std)</span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a>tc_std</span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co">#&gt; $total_contrib</span></span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co">#&gt;   tag_outcome total_contrib</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="co">#&gt; 1      energy     1125.0477</span></span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a><span class="co">#&gt; 2     protein     1218.9486</span></span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a><span class="co">#&gt; 3       carbs      836.8200</span></span>
+<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a><span class="co">#&gt; 4         fat      429.5956</span></span>
+<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a><span class="co">#&gt; 5        ghge      941.1514</span></span>
+<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a><span class="co">#&gt; $tag_food</span></span>
+<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;Bread&quot;                  &quot;Other grains&quot;           &quot;Potatoes&quot;              </span></span>
+<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Vegetables&quot;             &quot;Fruit, berries&quot;         &quot;Red meat&quot;              </span></span>
+<span id="cb11-36"><a href="#cb11-36" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Fish&quot;                   &quot;Eggs&quot;                   &quot;Milk, yoghurt&quot;         </span></span>
+<span id="cb11-37"><a href="#cb11-37" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Cheese&quot;                 &quot;Butter, margarine, oil&quot; &quot;Sugar, sweets&quot;         </span></span>
+<span id="cb11-38"><a href="#cb11-38" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a><span class="co">#&gt; $tag_outcome</span></span>
+<span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a><span class="co">#&gt; [1] &quot;energy&quot;  &quot;protein&quot; &quot;carbs&quot;   &quot;fat&quot;     &quot;ghge&quot;</span></span></code></pre></div>
+<p>Now we directly use the 90% ghge constraint coefficients.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># constraints based on std total contrib</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>constr_val_reduce_std <span class="ot">&lt;-</span> <span class="fu">compute_constr</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="at">data_total_contrib =</span> tc_std<span class="sc">$</span>total_contrib, </span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="at">data_constr_coef =</span> constr_coef_df_red)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>constr_val_reduce_std</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt;   tag_outcome total_contrib coef_constrlwr coef_construpr constr_lwr constr_upr</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; 1      energy     1125.0477           0.90            1.0  1012.5430  1125.0477</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; 2     protein     1218.9486           0.90            1.0  1097.0538  1218.9486</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; 3       carbs      836.8200           0.90            1.0   753.1380   836.8200</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; 4         fat      429.5956           0.90            1.0   386.6360   429.5956</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; 5        ghge      941.1514           0.81            0.9   762.3326   847.0363</span></span></code></pre></div>
+</div>
+</div>
+<div id="find-new-diet" class="section level2">
+<h2>Find new diet</h2>
+<p>In order to run the algorithm to search for new diet, we need to
+provide the algorithm the data we prepared from previous steps in a
+format that is ordered by outcome.</p>
+<p>Here we use the standardized constraints for numerical stability.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># split constraint values </span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>constval <span class="ot">&lt;-</span> <span class="fu">values_by_tag_outcome</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="at">data_unit_contrib =</span> cpu_selected_std, </span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="at">data_constr =</span> constr_val_reduce_std)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>constval<span class="sc">$</span>food_name</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;Bread&quot;                  &quot;Other grains&quot;           &quot;Potatoes&quot;              </span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Vegetables&quot;             &quot;Fruit, berries&quot;         &quot;Red meat&quot;              </span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Fish&quot;                   &quot;Eggs&quot;                   &quot;Milk, yoghurt&quot;         </span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Cheese&quot;                 &quot;Butter, margarine, oil&quot; &quot;Sugar, sweets&quot;</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>constval<span class="sc">$</span>tag_outcome</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;energy&quot;  &quot;protein&quot; &quot;carbs&quot;   &quot;fat&quot;     &quot;ghge&quot;</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co"># for energy, unit_contrib per food, lwr and upr bound of total contrib</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>constval<span class="sc">$</span>val<span class="sc">$</span>energy</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; $unit_contrib</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;  [1] 1.5501443 2.0322902 0.5493793 0.2268688 0.3955038 1.2090119 0.8821135</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt;  [8] 0.8955243 0.2869315 1.9569367 3.3898076 2.6070884</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; $lwr</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; [1] 1012.543</span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; $upr</span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; [1] 1125.048</span></span></code></pre></div>
+<p>Run the optimization, and retrieve the new diet along with current
+diet.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">find_new_diet</span>(<span class="at">diet0 =</span> diet_selected<span class="sc">$</span>intake_mean, </span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>                     <span class="at">diet0_upr =</span> diet_selected<span class="sc">$</span>intake_upr, </span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>                     <span class="at">diet0_lwr =</span> diet_selected<span class="sc">$</span>intake_lwr, </span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>                     <span class="at">tag_outcomes =</span> tag_outcome_5, </span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>                     <span class="at">constraint_val =</span> constval<span class="sc">$</span>val, </span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>                     <span class="at">print_runtime =</span> T)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># collect result</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>new_diet <span class="ot">&lt;-</span> <span class="fu">return_new_diet</span>(</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="at">result_obj =</span> res<span class="sc">$</span>run_optim, </span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="at">data_current_diet =</span> diet_selected)</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>new_diet</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt;                 food_name       new   current</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; 1                   Bread 187.13426 188.31866</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; 2            Other grains  45.55205  48.31437</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; 3                Potatoes  72.28687  72.79364</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; 4              Vegetables 164.69641 165.98669</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; 5          Fruit, berries 183.28101 184.13142</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt; 6                Red meat 110.70220 126.26154</span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt; 7                    Fish  70.96523  74.61885</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="co">#&gt; 8                    Eggs  24.27122  26.41185</span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt; 9           Milk, yoghurt 326.86944 328.64505</span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="co">#&gt; 10                 Cheese  34.88858  46.59652</span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt; 11 Butter, margarine, oil  30.65478  32.31694</span></span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="co">#&gt; 12          Sugar, sweets  14.05165  18.14473</span></span></code></pre></div>
+</div>
+<div id="present-the-results" class="section level2">
+<h2>Present the results</h2>
+<p>We can show some useful comparisons between the two diets, in terms
+of absolute and relative percent change.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># compute difference</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>new_old_compare <span class="ot">&lt;-</span> <span class="fu">compare_new_diet</span>(<span class="at">data_new_diet =</span> new_diet, </span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>                 <span class="at">data_current_diet =</span> diet_selected)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>new_old_compare</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt;                 food_name    new current current_lwr current_upr abs_change</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; 1                   Bread 187.13  188.32       18.83       343.8      -1.18</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; 2            Other grains  45.55   48.31        4.83       155.7      -2.76</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; 3                Potatoes  72.29   72.79        7.28       230.7      -0.51</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; 4              Vegetables 164.70  165.99       16.60       419.7      -1.29</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; 5          Fruit, berries 183.28  184.13       18.41       552.7      -0.85</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; 6                Red meat 110.70  126.26       12.63       299.6     -15.56</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 7                    Fish  70.97   74.62        7.46       302.9      -3.65</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; 8                    Eggs  24.27   26.41        2.64       111.6      -2.14</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; 9           Milk, yoghurt 326.87  328.65       32.86       900.6      -1.78</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; 10                 Cheese  34.89   46.60        4.66       121.6     -11.71</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; 11 Butter, margarine, oil  30.65   32.32        3.23        71.4      -1.66</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; 12          Sugar, sweets  14.05   18.14        1.81        66.0      -4.09</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co">#&gt;    perc_change</span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co">#&gt; 1        -0.01</span></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#&gt; 2        -0.06</span></span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a><span class="co">#&gt; 3        -0.01</span></span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a><span class="co">#&gt; 4        -0.01</span></span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a><span class="co">#&gt; 5         0.00</span></span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a><span class="co">#&gt; 6        -0.12</span></span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a><span class="co">#&gt; 7        -0.05</span></span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a><span class="co">#&gt; 8        -0.08</span></span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a><span class="co">#&gt; 9        -0.01</span></span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a><span class="co">#&gt; 10       -0.25</span></span>
+<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a><span class="co">#&gt; 11       -0.05</span></span>
+<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a><span class="co">#&gt; 12       -0.23</span></span></code></pre></div>
+<p>We can also validate whether the new diet satisfies the
+constraints.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># validate constraints</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>new_diet_validate <span class="ot">&lt;-</span> <span class="fu">validate_diet_contrib</span>(<span class="at">data_new_diet =</span> new_diet, </span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>                      <span class="at">data_unit_contrib =</span> cpu_selected,</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>                      <span class="at">data_constr =</span> constr_val_reduce)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>new_diet_validate</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt;   tag_outcome total_contrib_new total_contrib coef_constrlwr coef_construpr</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#&gt; 1      energy           7265.49       7762.51           0.90            1.0</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#&gt; 2     protein             81.73         88.58           0.90            1.0</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt; 3       carbs            188.46        194.44           0.90            1.0</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt; 4         fat             66.96         74.40           0.90            1.0</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt; 5        ghge              3.37          3.74           0.81            0.9</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt;   constr_lwr constr_upr check deviation</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt; 1    6986.26    7762.51    ok         0</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt; 2      79.72      88.58    ok         0</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt; 3     174.99     194.44    ok         0</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt; 4      66.96      74.40    ok         0</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt; 5       3.03       3.37    ok         0</span></span></code></pre></div>
+<p>It is possible to visualize the results or present results in better
+looking tables.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>d_compare_gram <span class="ot">&lt;-</span> <span class="fu">prep_diet_comparison_gram</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  new_old_compare)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">plot_diet_comparison_gram</span>(<span class="at">plot_obj =</span> d_compare_gram,</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>                          <span class="at">title_text =</span> <span class="st">&#39;New diet&#39;</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>                          <span class="at">axis_x_text =</span> <span class="st">&#39;Food groups&#39;</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>                          <span class="at">axis_y_text =</span> <span class="st">&#39;Intake (grams)&#39;</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>p1</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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+JLt8YPWYf92223X6iM577zz0v4HPehBrfujn+bSNe69997V7//+71e3uc1t0nXuuOOO1aWXXtps2v+97777Dr3Wce5bNM19HXDAAf3+t9xyy7QN/1eMVMMXKhyYFQ7U4XfoDL3jjjuuV4efe7WgSL//8A//sHfNNddscJm1jyjtd0ytLW2w/x3veEevDuenNnWIvlcLoV79gfeP+dM//dPexRdf3D/usMMOS/vqKFx/W6z83//9X68O9feP/eIXvxi7+su99tor7X/qU5/a3zZq5brrruv92Z/9Wb/f2tzsn+cmN7lJb6eddkr7bM9phx12SNuf8Yxn5JvT+rj3/ctf/rKHP/gYf377O+200zbof1obSOlChQMzw4FcALmoz372s73f+Z3fSR/FzjvvvMF1DhNAX//613u/+7u/m471EV999dX947/xjW/07nnPe6Z9hBJhhy655JL+B/jP//zP/fZWLrvssv4+H+lrX/vaJfsJqFvd6lapzdlnn71k36Afdai7VzuT0zF1CkLvc5/7XL/ppz/96d7GG2/cP2dXATTJfcdJa8d//3z//d//HZtXbFkE0IqxtnQ8CQeaAkgfhxxySP+j+Lu/+7sl3Q4TQLUJk47beuute20fU53c19eGjjnmmNQvIXLb2942HXfCCScsOdexxx6btocGRajlRHgQTHViYO8//uM/8l0D1//2b/82HUPT+OpXv7pBO8KkTkBMbboKoEnuO0682gKo+IDqN6bQbHPgqKOOqu5yl7uki5R0V5tiIy/4W9/6VnX++eendrVZVdWa0AbH8Lf8xV/8RdpeC7a0rAVBVWtaaf3DH/7wkmOivxe96EVp+0UXXVT9z//8T7/N+9///rT+sIc9rNpoo43624et1EIr7a6FWfK3NNu6bw75rjTpfXftf9rtNnwq0z5D6a9wYJkcUJbx1re+tbr//e9f1f6SivM1PvZBXdfmU3+XjF7Coo1ucIMbpM0+XMKEoHrMYx5TnXTSSdUnPvGJqtacKm1+8YtfVLVJlMoenvWsZ1VHHHFEKo+QN8MhjeKaHve4x6XfXf778pe/nJrd+973Htj8AQ94QPWud71r4P58x3LuO+9ntdaLAFotTpfzLIsD97nPfaqDDz64evWrX1194AMfqGgsT3/60wf2mX+IT3jCEwa2ix2Ej6hR7QxOeUc0GPVXtQ8q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" /><!-- --></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co">#d_compare_percent &lt;- prep_diet_comparison_percent(</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#  data_dietsummary = new_old_compare)</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co"># p2 &lt;- plot_diet_comparison_percent(plot_obj = d_compare_percent,</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co">#                                   title_text = &#39;Percent change&#39;,</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co">#                                   axis_x_text = &#39;Food groups&#39;,</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co">#                                   axis_y_text = &#39;Percent&#39;)</span></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="co"># library(patchwork)</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co"># p1 + p2 + plot_layout(nrow = 1)</span></span></code></pre></div>
+<p>Table with comments.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>d_tb_validate <span class="ot">&lt;-</span> <span class="fu">prep_validate_table</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="at">data_validate_diet =</span> new_diet_validate)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">table_validate</span>(d_tb_validate)</span></code></pre></div>
+<div id="cstgauvylj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cstgauvylj table {
+font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+#cstgauvylj thead, #cstgauvylj tbody, #cstgauvylj tfoot, #cstgauvylj tr, #cstgauvylj td, #cstgauvylj th {
+border-style: none;
+}
+#cstgauvylj p {
+margin: 0;
+padding: 0;
+}
+#cstgauvylj .gt_table {
+display: table;
+border-collapse: collapse;
+line-height: normal;
+margin-left: auto;
+margin-right: auto;
+color: #333333;
+font-size: 16px;
+font-weight: normal;
+font-style: normal;
+background-color: #FFFFFF;
+width: auto;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #A8A8A8;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #A8A8A8;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+}
+#cstgauvylj .gt_caption {
+padding-top: 4px;
+padding-bottom: 4px;
+}
+#cstgauvylj .gt_title {
+color: #333333;
+font-size: 125%;
+font-weight: initial;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-color: #FFFFFF;
+border-bottom-width: 0;
+}
+#cstgauvylj .gt_subtitle {
+color: #333333;
+font-size: 85%;
+font-weight: initial;
+padding-top: 3px;
+padding-bottom: 5px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-color: #FFFFFF;
+border-top-width: 0;
+}
+#cstgauvylj .gt_heading {
+background-color: #FFFFFF;
+text-align: center;
+border-bottom-color: #FFFFFF;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#cstgauvylj .gt_bottom_border {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#cstgauvylj .gt_col_headings {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#cstgauvylj .gt_col_heading {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 6px;
+padding-left: 5px;
+padding-right: 5px;
+overflow-x: hidden;
+}
+#cstgauvylj .gt_column_spanner_outer {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+padding-top: 0;
+padding-bottom: 0;
+padding-left: 4px;
+padding-right: 4px;
+}
+#cstgauvylj .gt_column_spanner_outer:first-child {
+padding-left: 0;
+}
+#cstgauvylj .gt_column_spanner_outer:last-child {
+padding-right: 0;
+}
+#cstgauvylj .gt_column_spanner {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 5px;
+overflow-x: hidden;
+display: inline-block;
+width: 100%;
+}
+#cstgauvylj .gt_spanner_row {
+border-bottom-style: hidden;
+}
+#cstgauvylj .gt_group_heading {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+text-align: left;
+}
+#cstgauvylj .gt_empty_group_heading {
+padding: 0.5px;
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: middle;
+}
+#cstgauvylj .gt_from_md > :first-child {
+margin-top: 0;
+}
+#cstgauvylj .gt_from_md > :last-child {
+margin-bottom: 0;
+}
+#cstgauvylj .gt_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+margin: 10px;
+border-top-style: solid;
+border-top-width: 1px;
+border-top-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+overflow-x: hidden;
+}
+#cstgauvylj .gt_stub {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cstgauvylj .gt_stub_row_group {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+vertical-align: top;
+}
+#cstgauvylj .gt_row_group_first td {
+border-top-width: 2px;
+}
+#cstgauvylj .gt_row_group_first th {
+border-top-width: 2px;
+}
+#cstgauvylj .gt_summary_row {
+color: #333333;
+background-color: #FFFFFF;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cstgauvylj .gt_first_summary_row {
+border-top-style: solid;
+border-top-color: #D3D3D3;
+}
+#cstgauvylj .gt_first_summary_row.thick {
+border-top-width: 2px;
+}
+#cstgauvylj .gt_last_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#cstgauvylj .gt_grand_summary_row {
+color: #333333;
+background-color: #FFFFFF;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cstgauvylj .gt_first_grand_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-style: double;
+border-top-width: 6px;
+border-top-color: #D3D3D3;
+}
+#cstgauvylj .gt_last_grand_summary_row_top {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: double;
+border-bottom-width: 6px;
+border-bottom-color: #D3D3D3;
+}
+#cstgauvylj .gt_striped {
+background-color: rgba(128, 128, 128, 0.05);
+}
+#cstgauvylj .gt_table_body {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#cstgauvylj .gt_footnotes {
+color: #333333;
+background-color: #FFFFFF;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#cstgauvylj .gt_footnote {
+margin: 0px;
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cstgauvylj .gt_sourcenotes {
+color: #333333;
+background-color: #FFFFFF;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#cstgauvylj .gt_sourcenote {
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cstgauvylj .gt_left {
+text-align: left;
+}
+#cstgauvylj .gt_center {
+text-align: center;
+}
+#cstgauvylj .gt_right {
+text-align: right;
+font-variant-numeric: tabular-nums;
+}
+#cstgauvylj .gt_font_normal {
+font-weight: normal;
+}
+#cstgauvylj .gt_font_bold {
+font-weight: bold;
+}
+#cstgauvylj .gt_font_italic {
+font-style: italic;
+}
+#cstgauvylj .gt_super {
+font-size: 65%;
+}
+#cstgauvylj .gt_footnote_marks {
+font-size: 75%;
+vertical-align: 0.4em;
+position: initial;
+}
+#cstgauvylj .gt_asterisk {
+font-size: 100%;
+vertical-align: 0;
+}
+#cstgauvylj .gt_indent_1 {
+text-indent: 5px;
+}
+#cstgauvylj .gt_indent_2 {
+text-indent: 10px;
+}
+#cstgauvylj .gt_indent_3 {
+text-indent: 15px;
+}
+#cstgauvylj .gt_indent_4 {
+text-indent: 20px;
+}
+#cstgauvylj .gt_indent_5 {
+text-indent: 25px;
+}
+#cstgauvylj .katex-display {
+display: inline-flex !important;
+margin-bottom: 0.75em !important;
+}
+#cstgauvylj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings gt_spanner_row">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id="tag_outcome">Outcome</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="**Total contribution**">
+        <div class="gt_column_spanner"><span class="gt_from_md"><strong>Total contribution</strong></span></div>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="**Constraint**">
+        <div class="gt_column_spanner"><span class="gt_from_md"><strong>Constraint</strong></span></div>
+      </th>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="tc_new">New diet</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="tc_current">Current diet</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="min">Range</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="check">Comments</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="tag_outcome" class="gt_row gt_left">energy</td>
+<td headers="tc_new" class="gt_row gt_right" style="font-weight: bold;">7265.49</td>
+<td headers="tc_current" class="gt_row gt_right">7762.51</td>
+<td headers="min" class="gt_row gt_right">6986.26‐7762.51</td>
+<td headers="check" class="gt_row gt_center">Ok</td></tr>
+    <tr><td headers="tag_outcome" class="gt_row gt_left">protein</td>
+<td headers="tc_new" class="gt_row gt_right" style="font-weight: bold;">81.73</td>
+<td headers="tc_current" class="gt_row gt_right">88.58</td>
+<td headers="min" class="gt_row gt_right">79.72‐88.58</td>
+<td headers="check" class="gt_row gt_center">Ok</td></tr>
+    <tr><td headers="tag_outcome" class="gt_row gt_left">carbs</td>
+<td headers="tc_new" class="gt_row gt_right" style="font-weight: bold;">188.46</td>
+<td headers="tc_current" class="gt_row gt_right">194.44</td>
+<td headers="min" class="gt_row gt_right">174.99‐194.44</td>
+<td headers="check" class="gt_row gt_center">Ok</td></tr>
+    <tr><td headers="tag_outcome" class="gt_row gt_left">fat</td>
+<td headers="tc_new" class="gt_row gt_right" style="font-weight: bold;">66.96</td>
+<td headers="tc_current" class="gt_row gt_right">74.40</td>
+<td headers="min" class="gt_row gt_right">66.96‐74.40</td>
+<td headers="check" class="gt_row gt_center">Ok</td></tr>
+    <tr><td headers="tag_outcome" class="gt_row gt_left">ghge</td>
+<td headers="tc_new" class="gt_row gt_right" style="font-weight: bold;">3.37</td>
+<td headers="tc_current" class="gt_row gt_right">3.74</td>
+<td headers="min" class="gt_row gt_right">3.03‐3.37</td>
+<td headers="check" class="gt_row gt_center">Ok</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
