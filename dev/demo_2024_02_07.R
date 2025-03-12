@@ -360,5 +360,11 @@ table_validate(d_tb_validate)
 
 
 
-
+# _______ ----
+# debug ----
+ddd
+plot_diet_comparison_percent(plot_obj = ddd,
+  title_text = 'Percent change',
+axis_x_text = 'Food groups',
+axis_y_text = 'Percent')
 

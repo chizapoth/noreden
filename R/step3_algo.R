@@ -148,6 +148,7 @@ f_make_constraint_function <- function(constraint_values, tag_outcomes){
 #' @param constraint_val A list of constraint values that match tag_outcomes
 #' @param print_runtime Whether to print runtime. Default is True.
 #' 
+#' @importFrom nloptr nloptr
 #' @return A list of results
 #' @export
 

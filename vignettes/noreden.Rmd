@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-`noreden` provides user-friendly functions to facilitate sustainable diet discovery. Given information for food (groups) and their nutritional and environmental impact information, the aim is to find a new diet (i.e. set of foods) that is healthy, acceptable, yet more sustainable in terms of environmenal impact. 
+`noreden` provides user-friendly functions to facilitate sustainable diet discovery. Given information for food (groups) and their nutritional and environmental impact information, the aim is to find a new diet (i.e. set of foods) that is healthy, acceptable, yet more sustainable in terms of environmental impact. 
 
-The optimization problem implemented minimizes the difference between the current and new target diet, subject to a set of inequality constraints with respect to nutrition and environmental impact. More details can be found in this document: [Optimization](https://andreaczhang.github.io/noreden/articles/noreden.html) (*replace link*)
+The optimization problem implemented minimizes the **difference between the current and new target diet**, subject to a set of inequality constraints with respect to nutrition and environmental impact. More details can be found in this document: [Optimization for NorEden](https://ocbe-uio.github.io/noreden_doc/documentation/).
 
 In order to find a new diet, you need the following input data: 
 
@@ -37,13 +37,13 @@ library(noreden)
 
 ## Process input
 
-We need some information on the current diet we wish to optimize. For now, we use the average diet summarized from a Norwegian dietary survey. However in the future we shall implement flexible input options so that you can insert it yourself.
+We need some information on the current diet we wish to optimize. For now, we use the **average diet** summarized from a Norwegian dietary survey. However in the future, we shall implement flexible input options so that you can insert the data yourself.
 
 ```{r}
 head(all_diet)
 ```
 
-We also need the contribution per unit (refered to as `cpu`) for each of the food. The food unit is per gram, and units for nutrition and environmental impact depends on the outcome. 
+We also need the **contribution per unit** (referred to as `cpu`) for each of the food. The food unit is per gram, and units for nutrition and environmental impact depends on the outcome. 
 
 ```{r}
 head(contrib_per_unit)
@@ -244,17 +244,17 @@ p1 <- plot_diet_comparison_gram(plot_obj = d_compare_gram,
                           title_text = 'New diet',
                           axis_x_text = 'Food groups',
                           axis_y_text = 'Intake (grams)')
+p1
+#d_compare_percent <- prep_diet_comparison_percent(
+#  data_dietsummary = new_old_compare)
 
-d_compare_percent <- prep_diet_comparison_percent(
-  data_dietsummary = new_old_compare)
+# p2 <- plot_diet_comparison_percent(plot_obj = d_compare_percent,
+#                                   title_text = 'Percent change',
+#                                   axis_x_text = 'Food groups',
+#                                   axis_y_text = 'Percent')
 
-p2 <- plot_diet_comparison_percent(plot_obj = d_compare_percent,
-                                   title_text = 'Percent change',
-                                   axis_x_text = 'Food groups',
-                                   axis_y_text = 'Percent')
-
-library(patchwork)
-p1 + p2 + plot_layout(nrow = 1)
+# library(patchwork)
+# p1 + p2 + plot_layout(nrow = 1)
 ```
 
 Table with comments.
