@@ -1,0 +1,9 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  noreden: noreden.html
+last_built: 2025-03-12T14:30Z
+urls:
+  reference: https://andreaczhang.github.io/noreden/reference
+  article: https://andreaczhang.github.io/noreden/articles
