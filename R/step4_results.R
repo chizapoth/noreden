@@ -58,7 +58,7 @@ compare_new_diet <- function(data_new_diet,
                      current_upr = intake_upr)
   d <- dplyr::mutate(d, 
                      abs_change = (new - current), 
-                     perc_change = (new - current)/current)|> 
+                     percent_change = (new - current)/current)|> 
     dplyr::mutate_if(is.numeric, round, 2)
   
   return(d)

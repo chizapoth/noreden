@@ -13,7 +13,7 @@ prep_diet_comparison_percent <- function(data_dietsummary,
   
   food_name <- NULL
   group_macro <- NULL
-  perc_change <- NULL
+  percent_change <- NULL
   
   
   d <- data_dietsummary
@@ -24,7 +24,7 @@ prep_diet_comparison_percent <- function(data_dietsummary,
                           by = 'food_name')
   }
   # select
-  pd <- dplyr::select(d, c(food_name, group_macro, perc_change))
+  pd <- dplyr::select(d, c(food_name, group_macro, percent_change))
   # order
   name_ordered <- dref_foodgroup$food_name
   pd$food_name_ordered <- factor(pd$food_name, 
@@ -75,7 +75,7 @@ plot_diet_comparison_percent <- function(plot_obj,
   # need to match the column names
   
   p <- ggplot(data = pd, aes(x = food_name_ordered, 
-                             y = perc_change, 
+                             y = percent_change, 
                              fill = group_macro))
   
   p <- p + geom_bar(position = 'dodge', 
@@ -83,14 +83,14 @@ plot_diet_comparison_percent <- function(plot_obj,
                     alpha = 0.7)
   p <- p + coord_flip()
   # add percentage text to the right
-  p <- p + geom_text(aes(label = round(perc_change, 1)), 
-                     y = max(pd$perc_change)*1.3,
+  p <- p + geom_text(aes(label = round(percent_change, 1)), 
+                     y = max(pd$percent_change)*1.3,
                      color = 'black', 
                      size = 4)
   
   # set limit 
-  pc_max <- max(pd$perc_change)
-  pc_min <- min(pd$perc_change)
+  pc_max <- max(pd$percent_change)
+  pc_min <- min(pd$percent_change)
   p <- p + ylim(pc_min - 0.1*(pc_max - pc_min), 
                 pc_max + 0.1*(pc_max - pc_min))
   # theme

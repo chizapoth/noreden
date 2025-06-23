@@ -1,5 +1,3 @@
-library(dplyr)
-
 # Sample dataset
 data_diet <- data.frame(
   food_name = c("Apple", "Banana", "Carrot", "Doughnut"),

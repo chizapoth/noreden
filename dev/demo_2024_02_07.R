@@ -119,75 +119,15 @@ FD2 <- c('Bread',
                     'Spices')#,
                     #'Other')
 
-FD3 <- c('Bread', 
-                    'Other grains', 
-                    'Cakes', 
-                    #'Potatoes', 
-                    'Vegetables', 
-                    'Legumes', 
-                    'Fruit, berries', 
-                    #'Juice', 
-                    #'Nuts', 
-                    'Vegetarian products', 
-                    #'Red meat', 
-                    #'White meat', 
-                    'Fish', 
-                    'Eggs', 
-                    #'Cream, cream desserts', 
-                    'Milk, yoghurt',
-                    'Cheese', 
-                    #'Butter, margarine, oil',
-                    #'Sugar, sweets', 
-                    'Coffee, tea', 
-                    'Soda, saft', 
-                    'Water')#, 
-                    #'Alcoholic beverages',
-                    #'Non-dairy milk',
-                    #'Snacks',
-                    #'Sauces',
-                    #'Spices',
-                    #'Other')
-
-
-FD4 <- c(#'Bread', 
-                   # 'Other grains', 
-                    #'Cakes', 
-                    #'Potatoes', 
-                    'Vegetables', 
-                    'Legumes', 
-                    'Fruit, berries', 
-                    #'Juice', 
-                    'Nuts', 
-                    #'Vegetarian products', 
-                    'Red meat', 
-                    'White meat', 
-                    'Fish', 
-                    #'Eggs', 
-                    #'Cream, cream desserts', 
-                    #'Milk, yoghurt',
-                    'Cheese', 
-                    'Butter, margarine, oil',
-                    'Sugar, sweets', 
-                    'Coffee, tea', 
-                    'Soda, saft', 
-                    #'Water', 
-                    #'Alcoholic beverages',
-                    #'Non-dairy milk',
-                    #'Snacks',
-                    #'Sauces',
-                    'Spices')#,
-                    #'Other')
-
-
 # run these two lines
-# TAG_FOOD <- FD1
+TAG_FOOD <- FD1
 #TAG_FOOD <- FD2
 #TAG_FOOD <- FD3
-TAG_FOOD <- FD4
+# TAG_FOOD <- FD4
 
 
 TAG_OUTCOME <- tag_outcome_5
-COEF_REDUCE <- 0.6
+COEF_REDUCE <- 0.8
 
 
 # select food and cpu ----
@@ -206,6 +146,9 @@ cpu_selected <- select_perunit(
   tag_outcome = TAG_OUTCOME)
 # cpu_selected
 
+# foods <- c('Bread', 'Vegetables', 'Red meat')
+# tag_outcomes <- c('energy', 'protein', 'ghge')
+# select_perunit(data_perunit_contrib = contrib_per_unit, tag_food = foods, tag_outcome = tag_outcomes)
 
 # total contrib ----# 
 
@@ -315,6 +258,7 @@ res
 new_diet <- return_new_diet(
   result_obj = res$run_optim, 
   data_current_diet = diet_selected)
+
 new_diet
 
 # compute difference
@@ -343,13 +287,6 @@ plot_diet_comparison_gram(plot_obj = d_compare_gram,
 
 
 
-d_compare_percent <- prep_diet_comparison_percent(
-  data_dietsummary = new_old_compare)
-
-plot_diet_comparison_percent(plot_obj = d_compare_percent,
-                             title_text = 'Percent change',
-                             axis_x_text = 'Food groups',
-                             axis_y_text = 'Percent')
 
 
 # table  ----
@@ -358,6 +295,14 @@ d_tb_validate <- prep_validate_table(
 table_validate(d_tb_validate)
 
 
+# plot 2 AFTER FIXING ----
+d_compare_percent <- prep_diet_comparison_percent(
+  data_dietsummary = new_old_compare)
+
+plot_diet_comparison_percent(plot_obj = d_compare_percent,
+                             title_text = 'Percent change',
+                             axis_x_text = 'Food groups',
+                             axis_y_text = 'Percent')
 
 
 # _______ ----

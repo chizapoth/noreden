@@ -245,16 +245,6 @@ p1 <- plot_diet_comparison_gram(plot_obj = d_compare_gram,
                           axis_x_text = 'Food groups',
                           axis_y_text = 'Intake (grams)')
 p1
-#d_compare_percent <- prep_diet_comparison_percent(
-#  data_dietsummary = new_old_compare)
-
-# p2 <- plot_diet_comparison_percent(plot_obj = d_compare_percent,
-#                                   title_text = 'Percent change',
-#                                   axis_x_text = 'Food groups',
-#                                   axis_y_text = 'Percent')
-
-# library(patchwork)
-# p1 + p2 + plot_layout(nrow = 1)
 ```
 
 Table with comments.
